@@ -1,0 +1,54 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+    
+    <!-- sqlSessionTemplate -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>
+ 
+    <!-- sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:/mybatis/mybatis-config.xml" />
+        <property name="mapperLocations">
+	        <list> <!-- 여러 sql문을 받아오기 위해 list로 받아온다 -->
+	            <value>classpath:/mapper/*.xml</value>
+	        </list>
+        </property>
+    </bean>
+ 	
+ 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<!-- oracle 경우 -->
+        <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
+        <property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@121.66.185.30:21521:orclcdb" />
+        <property name="username" value="kcnet" />
+        <property name="password" value="kcnet00!@#$"/>
+        <property name="autoCommit" value="false"/>
+        <property name="maximumPoolSize" value="10"/>
+        <property name="transactionIsolation" value="TRANSACTION_READ_COMMITTED"/>
+	</bean>
+
+    <!-- datasource spring profile 별로 설정 --> 
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"  destroy-method="close">
+    	<constructor-arg ref="hikariConfig" />
+    </bean>
+      
+    <bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 트랜잭션 AOP 설정 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="insert*" rollback-for = "Exception" propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+	
+</beans>

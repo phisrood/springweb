@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+	
+	<insert id="insertUser" parameterType="java.util.Map">
+	<selectKey  keyProperty="userId" order="BEFORE" resultType="String">
+	select Nvl(max(to_number(user_id)),0) +1 from user_info
+	</selectKey>
+	INSERT INTO USER_INFO
+	(
+		USER_ID
+		, PWD
+		, USE_YN
+	)
+	VALUES
+	(
+		#{userId}
+		, '1'
+		, 'Y'
+	)
+	</insert>
+</mapper>
