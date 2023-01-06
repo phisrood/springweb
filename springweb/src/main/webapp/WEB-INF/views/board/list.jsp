@@ -79,8 +79,8 @@
 					</a>					
 				</td>
 				<td><c:out value="${list.writer}"/></td>				
-				<td><fmt:formatDate pattern="yyyy-mm-dd" value="${list.regdate}"/>
-				<td><fmt:formatDate pattern="yyyy-mm-dd" value="${list.updateDate}"/>
+				<td><fmt:formatDate pattern="yyyy-MM-dd" value="${list.regdate}"/></td>
+				<td><fmt:formatDate pattern="yyyy-MM-dd" value="${list.updateDate}"/></td>
 			</tr>
 		</c:forEach>
 	</table>
@@ -102,6 +102,9 @@
 				}
 				if(result === 'insert success'){
 					alert("등록이 완료되었습니다.");
+				}
+				if(result === 'modify success'){
+					alert("수정이 완료되었습니다.");
 				}
 			}
 		});

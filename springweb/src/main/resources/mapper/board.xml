@@ -4,21 +4,22 @@
 	
 	<!-- 게시판 등록 -->
 	<insert id="insertBoard">
-		INSERT INTO YUNBOARD (title, writer, content) VALUES (#{title}, #{writer}, #{content})
+		INSERT INTO YUNBOARD (BNO, TITLE, WRITER, CONTENT) 
+		VALUES (BOARD_SEQ.NEXTVAL , #{title}, #{writer}, #{content})
 	</insert>
 
 	<!-- 게시판 목록조회 -->
 	<select id="getList" resultType="web.board.model.BoardVO">
 		SELECT * 
 		FROM YUNBOARD 
-		ORDER BY bno DESC
+		ORDER BY BNO DESC
 	</select>
 	
 	<!-- 게시판 상세조회 -->
 	<select id="getPage" resultType="web.board.model.BoardVO">
 		SELECT * 
 		FROM YUNBOARD 
-		WHERE bno = #{bno}
+		WHERE BNO = #{bno}
 	</select>
 	
 	<!-- 게시판 수정 -->

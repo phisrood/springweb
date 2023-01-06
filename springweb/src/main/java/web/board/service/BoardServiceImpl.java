@@ -16,46 +16,30 @@ public class BoardServiceImpl implements BoardService{
 	@Resource(name="commonDao")
 	private CommonDao commonDao;
 
+	/* 등록 */
 	@Override
 	public void insertBoard(BoardVO boardVo) throws SQLException {
 		commonDao.insert("insertBoard",boardVo);
 	}
 
+	/* 목록조회 */
 	@Override
 	public List<BoardVO> getList() throws SQLException {
 		return commonDao.selectList("getList");
 	}
 
+	/* 상세조회 */
 	@Override
 	public BoardVO getPage(int bno) throws SQLException {
 		return (BoardVO) commonDao.select("getPage", bno);
 	}
 
+	/* 수정 */
 	@Override
 	public int modify(BoardVO boardVo) throws SQLException {
 		return commonDao.update("modify", boardVo);
 	}
 	
-//	@Override
-//	public void insertBoard(BoardVO boardVo) {
-//		commonDao.insertBoard(boardVo);
-//		
-//	}
-//
-//	@Override
-//	public List<BoardVO> getList() {
-//		return commonDao.getList();
-//	}
-//
-//	@Override
-//	public BoardVO getPage(int bno) {
-//		return commonDao.getPage(bno);
-//	}
-//
-//	@Override
-//	public int modify(BoardVO boardVo) {
-//		// TODO Auto-generated method stub
-//		return commonDao.modify(boardVo);
-//	}
+
 
 }

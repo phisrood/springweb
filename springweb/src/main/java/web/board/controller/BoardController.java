@@ -33,7 +33,6 @@ public class BoardController {
 		try {
 			model.addAttribute("list", boardService.getList());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -51,7 +50,6 @@ public class BoardController {
 		try {
 			boardService.insertBoard(boardVo);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -60,13 +58,12 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	/* 게시판 조회 */
+	/* 상세조회 */
 	@GetMapping("/get")
 	public void boardGetPageGET(int bno, Model model) {
 		try {
 			model.addAttribute("pageInfo", boardService.getPage(bno));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -77,9 +74,22 @@ public class BoardController {
 		try {
 			model.addAttribute("pageInfo", boardService.getPage(bno));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	/* 수정 */
+	@PostMapping("/modify")
+	public String boardModifyPOST(BoardVO boardVo, RedirectAttributes rttr) {
+		
+		try {
+			boardService.modify(boardVo);	
+			rttr.addFlashAttribute("result", "modify success");
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/board/list";
 	}
 	
 	
