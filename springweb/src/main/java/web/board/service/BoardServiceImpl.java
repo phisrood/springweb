@@ -1,34 +1,61 @@
 package web.board.service;
 
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import web.board.dao.CommonDao;
+import web.board.model.BoardVO;
 
 @Service("boardService")
 public class BoardServiceImpl implements BoardService{
-	
-	private static final Logger logger = LoggerFactory.getLogger(BoardServiceImpl.class);
-	
+
 	@Resource(name="commonDao")
-	private CommonDao dao;
-	
+	private CommonDao commonDao;
+
 	@Override
-	public void insertArticle() throws SQLException{
-		try {
-		int cnt = dao.insert("insertUser", new HashMap());
-		logger.info("================"+String.valueOf(cnt));
-		dao.insert("test.insertTest");
-		}catch (Exception e) {
-			logger.info(e.getMessage());
-			throw new SQLException();
-		}
+	public void insertBoard(BoardVO boardVo) throws SQLException {
+		commonDao.insert("insertBoard",boardVo);
 	}
+
+	@Override
+	public List<BoardVO> getList() throws SQLException {
+		return commonDao.selectList("getList");
+	}
+
+	@Override
+	public BoardVO getPage(int bno) throws SQLException {
+		return (BoardVO) commonDao.select("getPage", bno);
+	}
+
+	@Override
+	public int modify(BoardVO boardVo) throws SQLException {
+		return commonDao.update("modify", boardVo);
+	}
+	
+//	@Override
+//	public void insertBoard(BoardVO boardVo) {
+//		commonDao.insertBoard(boardVo);
+//		
+//	}
+//
+//	@Override
+//	public List<BoardVO> getList() {
+//		return commonDao.getList();
+//	}
+//
+//	@Override
+//	public BoardVO getPage(int bno) {
+//		return commonDao.getPage(bno);
+//	}
+//
+//	@Override
+//	public int modify(BoardVO boardVo) {
+//		// TODO Auto-generated method stub
+//		return commonDao.modify(boardVo);
+//	}
 
 }

@@ -32,8 +32,16 @@
 		<level value="info" />
 	</logger>
 	
-	<logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG"/>
-<logger name="com.zaxxer.hikari" level="TRACE"/>
+	<logger name="com.zaxxer.hikari.HikariConfig" >
+			<level value="info" />
+	</logger>
+	<logger name="com.zaxxer.hikari" >
+		<level value="info" />
+	</logger>
+	
+	<logger name="jdbc.sqlonly">
+		<level value="debug" />
+	</logger>
 	
 	<logger name="jdbc.audit">
 		<level value="warn" />

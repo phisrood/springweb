@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+	
+	<!-- 게시판 등록 -->
+	<insert id="insertBoard">
+		INSERT INTO YUNBOARD (title, writer, content) VALUES (#{title}, #{writer}, #{content})
+	</insert>
+
+	<!-- 게시판 목록조회 -->
+	<select id="getList" resultType="web.board.model.BoardVO">
+		SELECT * 
+		FROM YUNBOARD 
+		ORDER BY bno DESC
+	</select>
+	
+	<!-- 게시판 상세조회 -->
+	<select id="getPage" resultType="web.board.model.BoardVO">
+		SELECT * 
+		FROM YUNBOARD 
+		WHERE bno = #{bno}
+	</select>
+	
+	<!-- 게시판 수정 -->
+	<update id="modify">
+		UPDATE YUNBOARD 
+		SET TITLE=#{title}, CONTENT=#{content}, UPDATEDATE= sysdate
+		WHERE BNO=#{bno}
+	</update>
+</mapper>
