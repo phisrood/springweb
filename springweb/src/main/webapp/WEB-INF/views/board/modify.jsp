@@ -50,11 +50,12 @@
 		padding-left : 80px;
 		margin-top : 50px;
 	}
+
 </style>
 </head>
 <body>
 	<h1>상세조회</h1>
-	<form action="modifyForm">
+	<form id="modifyForm" action="/board/modify" method="post">
 		<div class="input_wrap">
 			<label>게시판 번호</label>
 			<input name="bno" readonly value='<c:out value="${pageInfo.bno }"/>' />
@@ -67,23 +68,32 @@
 			<label>게시판 내용</label>
 			<textarea rows="3" name="content" ><c:out value="${pageInfo.content }" /></textarea>
 		</div>
-		<div class="input_wrap">
-			<label>등록일</label>
-			<input name="regdate" readonly value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.regdate}"/>' />
-		</div>
-		<div class="input_wrap">
-			<label>수정일</label>      
-			<input name="updateDate" readonly value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.updateDate}"/>' />
-		</div>
-		<div class="btn_wrap">
-			<a class="btn" id="list_btn">목록</a>
-			<a class="btn" id="modify_btn">수정하기</a>
-			<a class="btn" id="cancel_btn">수정취소</a>
-		</div>
 	</form>
+	<div class="input_wrap">
+		<label>작성자</label>
+		<input name="writer" readonly="readonly" value='<c:out value="${pageInfo.writer}" />' />
+	</div>
+	<div class="input_wrap">
+		<label>등록일</label>
+		<input name="regdate" readonly value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.regdate}"/>' />
+	</div>
+	<div class="input_wrap">
+		<label>수정일</label>      
+		<input name="updateDate" readonly value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.updateDate}"/>' />
+	</div>
+	<div class="btn_wrap">
+		<a class="btn" id="list_btn">목록</a>
+		<a class="btn" id="modify_btn">수정하기</a>
+		<a class="btn" id="delete_btn">삭제하기</a>
+		<a class="btn" id="cancel_btn">수정취소</a>
+	</div>
+
+
 	
 	<form id="infoForm" action="/board/modify" method="get">
 		<input type="hidden" id="bno" name="bno" value='<c:out value="${pageInfo.bno }"/>'/>
+		<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum }"/>' />
+		<input type="hidden" name="amount" value='<c:out value="${cri.amount }"/>' />
 	</form>
 	
 	
@@ -106,6 +116,13 @@
 	//수정취소 버튼
 	$("#cancel_btn").on("click", function(e){
 		form.attr("action", "/board/get");
+		form.submit();
+	});
+	
+	//삭제하기 버튼
+	$("#delete_btn").on("click", function(e){
+		form.attr("action", "/board/delete");
+		form.attr("method", "post");
 		form.submit();
 	});
 	

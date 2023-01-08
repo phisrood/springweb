@@ -83,18 +83,22 @@
 	</div>
 	<form id="infoForm" action="/board/modify" method="get">
 		<input type="hidden" id="bno" name="bno" value='<c:out value="${pageInfo.bno }"/>'/>
+		<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>' />
+		<input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>' />		
 	</form>
 	
 	
 <script>
 	var form = $("#infoForm");
 	
+	/* 목록버튼 클릭 */
 	$("#list_btn").on("click", function(e){
 		form.find("#bno").remove();
 		form.attr("action", "/board/list");
 		form.submit();
 	});
 	
+	/* 수정하기버튼 클릭 */
 	$("#modify_btn").on("click", function(e){
 		form.attr("action", "/board/modify");
 		form.submit();

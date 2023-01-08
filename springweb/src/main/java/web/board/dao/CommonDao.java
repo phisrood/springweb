@@ -53,4 +53,10 @@ public class CommonDao {
     public int update(String queryId, Object params) throws SQLException {
     	return sqlSession.update(queryId,params);
     }
+    
+
+    /* 총 개수 */
+    public int selectTotal(String queryId) throws SQLException {
+    	return sqlSession.selectOne(queryId);
+    }
 }

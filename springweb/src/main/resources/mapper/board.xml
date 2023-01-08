@@ -1,19 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="board">
+	 <!-- 
+	 <resultMap type="web.board.model.BoardVO" id="resultBoardVO">
+			<result property="bno" column="BNO" /> 					게시판 번호
+			<result property="title" column="TITLE" /> 				게시판 제목
+			<result property="content" column="CONTENT" /> 			게시판 내용
+			<result property="writer" column="WRITER" /> 			게시판 작가
+			<result property="regdate" column="REGDATE" /> 			등록 날짜  
+			<result property="updateDate" column="UPDATEDATE" /> 	수정 날짜
+	</resultMap> 
+	-->
+	
+	<!-- 게시판 목록조회 -->
+<!-- 	<select id="getList" resultType="web.board.model.BoardVO">
+		SELECT *
+		FROM YUNBOARD ORDER BY ROWNUM DESC
+	</select> -->
+	
+	<!-- 게시판 목록(페이징) -->
+	<select id="getListPaging" resultType="web.board.model.BoardVO">
+	    <![CDATA[
+	        SELECT ROWNUM, BNO, TITLE, CONTENT, WRITER, REGDATE, UPDATEDATE FROM(	        
+	                SELECT /*+INDEX_DESC(YUNBOARD pk_board1) */ ROWNUM  as rn, 
+	                       BNO, TITLE, CONTENT, WRITER, REGDATE, UPDATEDATE	                  
+	                FROM YUNBOARD where ROWNUM <= #{pageNum} * #{amount}) 	                
+	        WHERE rn > (#{pageNum} -1) * #{amount}
+	        ORDER BY ROWNUM DESC
+	    ]]>    
+    </select>
+    
+    <!-- 게시판 총 개수 -->
+    <select id="getTotal" resultType="int">
+    	SELECT COUNT(*) FROM YUNBOARD
+    </select>
 	
 	<!-- 게시판 등록 -->
 	<insert id="insertBoard">
 		INSERT INTO YUNBOARD (BNO, TITLE, WRITER, CONTENT) 
 		VALUES (BOARD_SEQ.NEXTVAL , #{title}, #{writer}, #{content})
 	</insert>
-
-	<!-- 게시판 목록조회 -->
-	<select id="getList" resultType="web.board.model.BoardVO">
-		SELECT * 
-		FROM YUNBOARD 
-		ORDER BY BNO DESC
-	</select>
 	
 	<!-- 게시판 상세조회 -->
 	<select id="getPage" resultType="web.board.model.BoardVO">
@@ -28,4 +54,9 @@
 		SET TITLE=#{title}, CONTENT=#{content}, UPDATEDATE= sysdate
 		WHERE BNO=#{bno}
 	</update>
+	
+	<!-- 게시판 삭제 -->
+	<delete id="delete">
+		DELETE FROM YUNBOARD WHERE BNO = #{bno}
+	</delete>
 </mapper>
