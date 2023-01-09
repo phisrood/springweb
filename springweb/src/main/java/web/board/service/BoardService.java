@@ -8,7 +8,7 @@ import web.board.model.Criteria;
 
 public interface BoardService {
 	/* 목록조회 */
-//	public List<BoardVO> getList() throws SQLException;
+	public List<BoardVO> getList() throws SQLException;
 	/* 게시판 목록(페에징 적용) */
 	public List<BoardVO> getListPaging(Criteria cri) throws SQLException;
 	/* 게시판 총 개수*/

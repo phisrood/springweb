@@ -21,6 +21,10 @@
 			<label>작성자</label>
 			<input name="writer"/>
 		</div>
+		<div>
+			<label>업로드</label>
+			<input name="writer"/>
+		</div>
 		<button>등록</button>
 	</form>
 </body>

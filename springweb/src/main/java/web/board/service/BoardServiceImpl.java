@@ -18,10 +18,10 @@ public class BoardServiceImpl implements BoardService{
 	private CommonDao commonDao;
 
 	/* 목록조회 */
-/*	@Override
+	@Override
 	public List<BoardVO> getList() throws SQLException {
 		return commonDao.selectList("getList");
-	}*/
+	}
 	/* 게시판 목록(페이징 적용) */
 	@Override
 	public List<BoardVO> getListPaging(Criteria cri) throws SQLException {
