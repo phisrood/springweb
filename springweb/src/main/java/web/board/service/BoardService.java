@@ -2,6 +2,9 @@ package web.board.service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import web.board.model.BoardVO;
 import web.board.model.Criteria;
@@ -13,12 +16,17 @@ public interface BoardService {
 	public List<BoardVO> getListPaging(Criteria cri) throws SQLException;
 	/* 게시판 총 개수*/
 	public int getTotal() throws SQLException;
-	/* 등록 */
-	public void insertBoard(BoardVO boardVo) throws SQLException;
+	/* 등록 (첨부파일)*/
+	public void insertBoard(BoardVO boardVo, MultipartHttpServletRequest mpRequest) throws SQLException, Exception;
 	/* 상세조회 */
 	public BoardVO getPage(int bno) throws SQLException;
+	/* 첨부파일 조회 */
+	public List<Map<String, Object>> selectFileList(int bno) throws SQLException;
+	/* 첨부파일 다운로드 */
+	public Map<String, Object> selectFileInfo(Map<String, Object> map) throws SQLException;
+	
 	/* 게시판 수정 */
-	public int modify(BoardVO boardVo) throws SQLException;
+	public void modify(BoardVO boardVo, String[] files, String[] fileNames, MultipartHttpServletRequest mpRequest) throws SQLException;
 	/* 게시판 삭제 */
 	public int delete(int bno) throws SQLException;
 	

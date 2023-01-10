@@ -2,20 +2,26 @@ package web.board.service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import web.board.dao.CommonDao;
 import web.board.model.BoardVO;
 import web.board.model.Criteria;
+import web.board.util.FileUtils;
 
 @Service("boardService")
 public class BoardServiceImpl implements BoardService{
 
 	@Resource(name="commonDao")
 	private CommonDao commonDao;
+	
+	@Resource(name="fileUtils")
+	private FileUtils fileUtils;
 
 	/* 목록조회 */
 	@Override
@@ -36,8 +42,14 @@ public class BoardServiceImpl implements BoardService{
 	
 	/* 등록 */
 	@Override
-	public void insertBoard(BoardVO boardVo) throws SQLException {
+	public void insertBoard(BoardVO boardVo, MultipartHttpServletRequest mpRequest) throws Exception {
 		commonDao.insert("insertBoard",boardVo);
+		
+		List<Map<String,Object>> list = fileUtils.parseInsertFileInfo(boardVo, mpRequest); 
+		int size = list.size();
+		for(int i=0; i<size; i++){ 
+			commonDao.insertFile(list.get(i)); 
+		}
 	}
 
 	/* 상세조회 */
@@ -45,11 +57,25 @@ public class BoardServiceImpl implements BoardService{
 	public BoardVO getPage(int bno) throws SQLException {
 		return (BoardVO) commonDao.select("getPage", bno);
 	}
+	
+	/* 첨부파일 조회 */
+	@Override
+	public List<Map<String, Object>> selectFileList(int bno) throws SQLException {
+		return commonDao.selectFileList(bno);
+	}
 
+	/* 첨부파일 다운로드 */
+	@Override
+	public Map<String, Object> selectFileInfo(Map<String, Object> map) throws SQLException {
+		return commonDao.selectFileInfo(map);
+	}
+	
 	/* 수정 */
 	@Override
-	public int modify(BoardVO boardVo) throws SQLException {
-		return commonDao.update("modify", boardVo);
+	public void modify(BoardVO boardVo, String[] files, String[] fileNames, MultipartHttpServletRequest mpRequest) throws SQLException {
+		commonDao.update("modify", boardVo);
+		
+//		List<Map<String, Object>> list = fileUtils.parse
 	}
 
 	/* 삭제*/
@@ -57,6 +83,9 @@ public class BoardServiceImpl implements BoardService{
 	public int delete(int bno) throws SQLException {
 		return commonDao.delete("delete", bno);
 	}
+	
+
+
 
 
 	

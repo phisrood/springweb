@@ -2,6 +2,7 @@ package web.board.dao;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,4 +60,21 @@ public class CommonDao {
     public int selectTotal(String queryId) throws SQLException {
     	return sqlSession.selectOne(queryId);
     }
+
+    /* 첨부파일 업로드 */
+	public void insertFile(Map<String, Object> map) throws SQLException{
+		sqlSession.insert("insertFile", map);
+	}
+	/* 첨부파일 조회 */
+	public List<Map<String, Object>> selectFileList (int bno) throws SQLException{
+		return sqlSession.selectList("selectFileList", bno);
+	}
+	/* 첨부파일 다운로드 */
+	public Map<String, Object> selectFileInfo(Map<String, Object> map) throws SQLException{
+		return sqlSession.selectOne("selectFileInfo", map);
+	}
+	/* 첨부파일 수정 */
+	public void updateFile(Map<String, Object> map) throws SQLException {
+		sqlSession.update("updateFile", map);
+	}
 }

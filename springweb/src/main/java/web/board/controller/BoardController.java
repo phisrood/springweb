@@ -1,10 +1,15 @@
 package web.board.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +18,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import web.board.model.BoardVO;
@@ -66,11 +73,12 @@ public class BoardController {
 		log.info("게시판 등록 페이지 진입");
 	}
 	
+	/* 등록 */
 	@PostMapping("/insert")
-	public String insertBoardPOST(BoardVO boardVo, RedirectAttributes rttr) {
+	public String insertBoardPOST(BoardVO boardVo, RedirectAttributes rttr, MultipartHttpServletRequest mpRequest) throws Exception {
 		log.info("BoardVO: "+ boardVo);
 		try {
-			boardService.insertBoard(boardVo);
+			boardService.insertBoard(boardVo, mpRequest);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -86,6 +94,10 @@ public class BoardController {
 		try {
 			model.addAttribute("pageInfo", boardService.getPage(bno));
 			model.addAttribute("cri", cri);
+			
+			List<Map<String, Object>> fileList = boardService.selectFileList(bno);
+			model.addAttribute("file", fileList);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -107,7 +119,7 @@ public class BoardController {
 	public String boardModifyPOST(BoardVO boardVo, RedirectAttributes rttr) {
 		System.out.println("/board/modify - 수정테스트");
 		try {
-			boardService.modify(boardVo);	
+			boardService.modify(boardVo, null, null, null);	
 			rttr.addFlashAttribute("result", "modify success");
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -131,7 +143,23 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-
+	/* 파일 다운로드 */
+	@RequestMapping(value="/fileDown")
+	public void fileDown(@RequestParam Map<String, Object> map, HttpServletResponse response) throws SQLException, IOException {
+		Map<String, Object> resultMap = boardService.selectFileInfo(map);
+		String storedFileName = (String) resultMap.get("STORED_FILE_NAME");
+		String originalFileName = (String) resultMap.get("ORG_FILE_NAME");
+		
+		//파일을 저장했던 위치에서 첨부파일을 읽어 byte[]형식으로 변환
+		byte fileByte[] = org.apache.commons.io.FileUtils.readFileToByteArray(new File("C:\\yun\\file\\"+storedFileName));
+		
+		response.setContentType("application/octet-stream");
+		response.setContentLength(fileByte.length);
+		response.setHeader("Content-Disposition", "attachment; fileName=\""+URLEncoder.encode(originalFileName, "UTF-8")+"\";");
+		response.getOutputStream().write(fileByte);
+		response.getOutputStream().flush();
+		response.getOutputStream().close();
+	}
 	
 	
 	

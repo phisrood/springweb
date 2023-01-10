@@ -8,7 +8,7 @@
 </head>
 <body>
 	<h1>게시판 등록</h1>
-	<form action="/board/insert" method="post">
+	<form action="/board/insert" method="post" enctype="multipart/form-data">
 		<div>
 			<label>제목</label>
 			<input name="title" />
@@ -23,7 +23,7 @@
 		</div>
 		<div>
 			<label>업로드</label>
-			<input name="writer"/>
+			<input type="file" name="uploadFile"/>
 		</div>
 		<button>등록</button>
 	</form>

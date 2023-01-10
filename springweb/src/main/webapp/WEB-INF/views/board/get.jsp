@@ -77,6 +77,12 @@
 		<label>수정일</label>
 		<input name="updateDate" readonly="readonly" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.updateDate}"/>' />
 	</div>
+	<div class="input_wrap">
+		<label>첨부파일</label>
+		<c:forEach var="file" items="${file }">
+			<a href="#" onclick="fn_fileDown('${file.FILE_NO}'); return false;">${file.ORG_FILE_NAME}</a>(${file.FILE_SIZE}kb)<br>
+		</c:forEach>
+	</div>
 	<div class="btn_wrap">
 		<a class="btn" id="list_btn">목록</a>
 		<a class="btn" id="modify_btn">수정하기</a>
@@ -85,6 +91,7 @@
 		<input type="hidden" id="bno" name="bno" value='<c:out value="${pageInfo.bno }"/>'/>
 		<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>' />
 		<input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>' />		
+		<input type="hidden" id="FILE_NO" name="FILE_NO" value="" />
 	</form>
 	
 	
@@ -103,6 +110,13 @@
 		form.attr("action", "/board/modify");
 		form.submit();
 	})
+	
+	/* 첨부파일 다운로드 기능*/
+	function fn_fileDown(fileNo){
+		$("#FILE_NO").attr("value", fileNo);
+		form.attr("action", "/board/fileDown");
+		form.submit();
+	}
 	
 </script>
 </body>
