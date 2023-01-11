@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reply">
+
+	<!-- 댓글 조회 -->
+	<select id="readReply" resultType="web.board.model.ReplyVO">
+		SELECT RNO, RCONTENT, RWRITER, RREGDATE
+		FROM YUN_REPLY
+		WHERE BNO = #{bno}
+	</select>
+
+	<!-- 댓글 등록 -->
+	<insert id="writeReply">
+		INSERT INTO YUN_REPLY (BNO, RNO, RCONTENT, RWRITER) 
+				VALUES (#{bno}, YUN_REPLY_SEQ.NEXTVAL, #{rContent}, #{rWriter})
+	</insert>
+	
+	<!-- 댓글 수정 -->
+	<update id="updateReply" parameterType="web.board.model.ReplyVO">
+		UPDATE YUN_REPLY SET RCONTENT = #{rContent} WHERE RNO=#{rno}
+	</update>
+
+	<!-- 선택된 댓글 조회 -->
+	<select id="selectReply" resultType="web.board.model.ReplyVO">
+		SELECT BNO,RNO,RCONTENT, RWRITER, RREGDATE 
+		FROM YUN_REPLY WHERE RNO = #{rno}
+	</select>
+</mapper>

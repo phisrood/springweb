@@ -8,6 +8,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import web.board.model.ReplyVO;
+
 @Repository(value="commonDao")
 public class CommonDao {
  
@@ -77,4 +79,5 @@ public class CommonDao {
 	public void updateFile(Map<String, Object> map) throws SQLException {
 		sqlSession.update("updateFile", map);
 	}
+
 }

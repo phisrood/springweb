@@ -87,6 +87,26 @@
 		<a class="btn" id="list_btn">목록</a>
 		<a class="btn" id="modify_btn">수정하기</a>
 	</div>
+	
+	<!-- 댓글 -->
+	<div id="reply">
+		<ol class="replyList">
+			<c:forEach items="${replyList}" var="replyList">
+				<li>
+					<p>
+						작성자: ${replyList.rWriter}<br/>
+						작성일자:<fmt:formatDate value="${replyList.rRegdate}" pattern="yyyy-MM-dd"/>
+					</p>
+					<p>${replyList.rContent}</p>
+					<div>
+						<button type="button" class="replyUpdateBtn" data-rno="${replyList.rno }">수정</button>
+						<button type="button" class="replyDeleteBtn" data-rno="${replyList.rno }">삭제</button>
+					</div>
+				</li>
+			</c:forEach>
+		</ol>
+	</div>
+
 	<form id="infoForm" action="/board/modify" method="get">
 		<input type="hidden" id="bno" name="bno" value='<c:out value="${pageInfo.bno }"/>'/>
 		<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>' />
@@ -94,6 +114,16 @@
 		<input type="hidden" id="FILE_NO" name="FILE_NO" value="" />
 	</form>
 	
+	<form name="replyForm" method="post">
+		<input type="hidden" id="bno" name="bno" value='<c:out value="${pageInfo.bno }"/>' />
+		<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>' />
+		<input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>' />
+		<div>
+			<label>댓글 작성자</label><input type="text" id="rWriter" name="rWriter" /><br/>
+			<label>댓글 내용</label><input type="text" id="rContent" name="rContent" />
+		</div>
+		<button type="button" class="replyWriteBtn">댓글작성</button>
+	</form>
 	
 <script>
 	var form = $("#infoForm");
@@ -117,6 +147,18 @@
 		form.attr("action", "/board/fileDown");
 		form.submit();
 	}
+	
+	/* 댓글 작성버튼 클릭 */
+	$(".replyWriteBtn").on("click", function(){
+		var formReply = $("form[name='replyForm']");
+		formReply.attr("action","/board/writeReply");
+		formReply.submit();
+	});
+	
+	/* 댓글 수정 view 이동 버튼 */
+	$(".replyUpdateBtn").on("click", function(){
+		location.href= "/board/replyUpdateView?bno=${pageInfo.bno}&rno="+$(this).attr("data-rno");
+	});
 	
 </script>
 </body>

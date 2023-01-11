@@ -25,15 +25,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import web.board.model.BoardVO;
 import web.board.model.Criteria;
 import web.board.model.PageMakerDTO;
+import web.board.model.ReplyVO;
 import web.board.service.BoardService;
+import web.board.service.ReplyService;
 
 @Controller
 @RequestMapping("/board/*")
 public class BoardController {
-
 	private static final Logger log = LoggerFactory.getLogger(BoardController.class);
+	
 	@Resource(name="boardService")
 	private BoardService boardService;
+	
+	@Resource(name="replyService")
+	private ReplyService replyService;
 	
 	
 	/* 게시판 목록 페이지 접속 */
@@ -98,6 +103,10 @@ public class BoardController {
 			List<Map<String, Object>> fileList = boardService.selectFileList(bno);
 			model.addAttribute("file", fileList);
 			
+			List<ReplyVO> replyList = replyService.readReply(bno);
+			
+			model.addAttribute("replyList", replyList);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -161,7 +170,44 @@ public class BoardController {
 		response.getOutputStream().close();
 	}
 	
+	/* 댓글 작성 */
+	@PostMapping("/writeReply")
+	public String writeReply(ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
+		
+		try {
+			replyService.writeReply(replyVo);			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+
+		rttr.addAttribute("bno", replyVo.getBno());
+		
+		return "redirect:/board/get";
+	}
 	
+	/* 댓글 수정 페이지에 접근하기 위한 컨트롤러 : GET */
+	/*
+	 * @GetMapping("/replyUpdateView") public String replyUpdateView(ReplyVO
+	 * replyVo, Model model) throws SQLException{
+	 * 
+	 * try { model.addAttribute("replyUpdate",
+	 * replyService.selectReply(replyVo.getRno())); }catch(SQLException e) {
+	 * e.printStackTrace(); }
+	 * 
+	 * return "board/replyUpdateView"; }
+	 */
+	
+	/* 댓글 수정 : POST */
+	/*
+	 * @PostMapping("/replyUpdate") public String replyUpdate(ReplyVO replyVo,
+	 * RedirectAttributes rttr) throws SQLException{ try {
+	 * replyService.updateReply(replyVo); }catch(SQLException e) {
+	 * e.printStackTrace(); }
+	 * 
+	 * rttr.addAttribute("bno", replyVo.getBno());
+	 * 
+	 * return "redirect:/board/get"; }
+	 */
 	
 	
 }
