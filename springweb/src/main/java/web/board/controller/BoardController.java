@@ -209,8 +209,24 @@ public class BoardController {
 		}
 	  
 		rttr.addAttribute("bno", replyVo.getBno());
+		rttr.addAttribute("rno", replyVo.getRno());
 	  
 		return "redirect:/board/get"; 
+	}
+	
+	
+	/* 댓글 삭제 : post */
+	@PostMapping("/replyDelete")
+	public String replyDelete(ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
+		try {
+			replyService.deleteReply(replyVo);
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		rttr.addAttribute("bno", replyVo.getBno());
+		
+		return "redirect:/board/get";
 	}
 	 
 	

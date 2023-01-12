@@ -39,6 +39,13 @@ public class ReplyServiceImpl implements ReplyService {
 	public ReplyVO selectReply(int rno) throws SQLException {
 		return (ReplyVO) commonDao.select("selectReply", rno);
 	}
+
+	/* 댓글 삭제 */
+	@Override
+	public void deleteReply(ReplyVO replyVo) throws SQLException {
+		commonDao.delete("deleteReply", replyVo);
+		
+	}
 	
 	
 

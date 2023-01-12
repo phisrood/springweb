@@ -30,7 +30,7 @@
 	    ]]>  -->   
 	    <![CDATA[
 	    	SELECT ROWNUM , BNO,TITLE, CONTENT, WRITER, REGDATE, UPDATEDATE 
-			FROM YUNBOARD  ORDER BY ROWNUM DESC offset (#{pageNum}-1)*10 ROWS FETCH NEXT #{amount} ROWS ONLY		
+			FROM YUNBOARD  ORDER BY bno DESC offset (#{pageNum}-1)*10 ROWS FETCH NEXT #{amount} ROWS ONLY		
 	    ]]>
 	     
     </select>

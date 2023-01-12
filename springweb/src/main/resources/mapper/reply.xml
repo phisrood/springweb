@@ -4,9 +4,10 @@
 
 	<!-- 댓글 조회 -->
 	<select id="readReply" resultType="web.board.model.ReplyVO">
-		SELECT RNO, RCONTENT, RWRITER, RREGDATE
-		FROM YUN_REPLY
-		WHERE BNO = #{bno}
+		SELECT RNO, RCONTENT, RWRITER, RREGDATE 
+		FROM YUN_REPLY 
+		WHERE BNO = #{bno} 
+		ORDER BY RREGDATE DESC
 	</select>
 
 	<!-- 댓글 등록 -->
@@ -25,4 +26,9 @@
 		SELECT BNO,RNO,RCONTENT, RWRITER, RREGDATE 
 		FROM YUN_REPLY WHERE RNO = #{rno}
 	</select>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteReply" parameterType="web.board.model.ReplyVO">
+		DELETE FROM YUN_REPLY WHERE RNO = #{rno}
+	</delete>
 </mapper>

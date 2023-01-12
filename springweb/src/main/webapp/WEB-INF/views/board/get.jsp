@@ -8,10 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.4.1.js"
-  		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-  		crossorigin="anonymous"></script>
-
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 <style type="text/css">
 	.input_wrap{
 		padding: 5px 20px;
@@ -88,6 +85,19 @@
 		<a class="btn" id="modify_btn">수정하기</a>
 	</div>
 	
+	<hr/>
+	
+	<form name="replyForm" method="post">
+		<input type="hidden" id="bno" name="bno" value='<c:out value="${pageInfo.bno }"/>' />
+		<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>' />
+		<input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>' />
+		<div>
+			<label>댓글 작성자</label><input type="text" id="rWriter" name="rWriter" />
+			<label>댓글 내용</label><input type="text" id="rContent" name="rContent" />
+		</div>
+		<button type="button" class="replyWriteBtn">댓글작성</button>
+	</form>
+
 	<!-- 댓글 -->
 	<div id="reply">
 		<ol class="replyList">
@@ -114,16 +124,7 @@
 		<input type="hidden" id="FILE_NO" name="FILE_NO" value="" />
 	</form>
 	
-	<form name="replyForm" method="post">
-		<input type="hidden" id="bno" name="bno" value='<c:out value="${pageInfo.bno }"/>' />
-		<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>' />
-		<input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>' />
-		<div>
-			<label>댓글 작성자</label><input type="text" id="rWriter" name="rWriter" /><br/>
-			<label>댓글 내용</label><input type="text" id="rContent" name="rContent" />
-		</div>
-		<button type="button" class="replyWriteBtn">댓글작성</button>
-	</form>
+
 	
 <script>
 	var form = $("#infoForm");
@@ -157,7 +158,30 @@
 	
 	/* 댓글 수정 view 이동 버튼 */
 	$(".replyUpdateBtn").on("click", function(){
-		location.href= "/board/replyUpdateView?bno=${pageInfo.bno}&rno="+$(this).attr("data-rno");
+
+		//location.href= "/board/replyUpdateView?bno=${pageInfo.bno}&rno="+$(this).attr("data-rno");
+		var popUrl = "/board/replyUpdateView?bno=${pageInfo.bno}&rno="+$(this).attr("data-rno");
+		var popOption = "width=490px, height=490px, top=300px, left=300px, scrollbars=yes";
+		
+		window.open(popUrl, "리뷰수정", popOption);
+	});
+	
+	/* 삭제 버튼 */
+	$(".replyDeleteBtn").on("click", function(){
+		var a = confirm("작성하신 댓글을 삭제하시겠습니까?");
+		if(!a){
+		}else{
+			var formReply = $("form[name='replyForm']");
+			
+			formReply.append("<input type='hidden' name='rno' value='"+ $(this).attr("data-rno") +"'>");
+			//formReply.append("input[name='replyForm']").val($(this).attr("data-rno"));
+			
+			formReply.attr("action", "/board/replyDelete");
+			formReply.attr("method", "post");
+			formReply.submit();
+		}
+		
+		
 	});
 	
 </script>

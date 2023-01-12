@@ -12,40 +12,55 @@
 			var formObj = $("form[name='updateForm']");
 			
 			$(".cancel_btn").on("click", function(){
-				location.href = "/board/readView?bno=${replyUpdate.bno}";
+				//location.href = "/board/readView?bno=${replyUpdate.bno}";
+				window.close();
 			})
 			
+			
+			$(".update_btn").on("click", function(e){
+	 			console.log(111);
+				var data ={
+						rContent : $("#content").val(),
+						bno : $("#bno").val(),
+						rno : $("#rno").val()
+				}
+
+				$.ajax({
+					data : data,
+					type : 'POST',
+					url  : '/board/replyUpdate',
+					success : function(result){
+						window.close();
+					}
+				})
+			});
 		})
+		
+ 		
 		
 	</script>
 	<body>
 		<div id="root">
 			<header>
-				<h1> 게시판</h1>
+				<h1>댓글 수정</h1>
 			</header>
 			<hr />
-			 
-			<div>
-				<%@include file="nav.jsp" %>
-			</div>
-			<hr />
-			
 			<section id="container">
 				<form name="updateForm" role="form" method="post" action="/board/replyUpdate">
-					<input type="hidden" name="bno" value="${replyUpdate.bno}" readonly="readonly"/>
+					<input type="hidden" id="bno" name="bno" value="${replyUpdate.bno}" readonly="readonly"/>
 					<input type="hidden" id="rno" name="rno" value="${replyUpdate.rno}" />
 					<table>
 						<tbody>
 							<tr>
 								<td>
-									<label for="content">댓글 내용</label><input type="text" id="content" name="content" value="${replyUpdate.rContent}"/>
+									<label for="content">댓글 내용</label>
+									<input type="text" id="content" name="rContent" value="${replyUpdate.rContent}"/>
 								</td>
 							</tr>	
-							
 						</tbody>			
 					</table>
 					<div>
-						<button type="submit" class="update_btn">저장</button>
+						<button type="button" class="update_btn">저장</button>
 						<button type="button" class="cancel_btn">취소</button>
 					</div>
 				</form>

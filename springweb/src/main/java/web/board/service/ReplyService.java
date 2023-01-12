@@ -14,4 +14,6 @@ public interface ReplyService {
 	public void updateReply(ReplyVO replyVo) throws SQLException;
 	/* 선택된 댓글 조회 */
 	public ReplyVO selectReply(int rno) throws SQLException;
+	/* 댓글 삭제 */
+	public void deleteReply(ReplyVO replyVo) throws SQLException;
 }
