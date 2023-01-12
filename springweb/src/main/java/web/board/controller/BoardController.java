@@ -186,28 +186,33 @@ public class BoardController {
 	}
 	
 	/* 댓글 수정 페이지에 접근하기 위한 컨트롤러 : GET */
-	/*
-	 * @GetMapping("/replyUpdateView") public String replyUpdateView(ReplyVO
-	 * replyVo, Model model) throws SQLException{
-	 * 
-	 * try { model.addAttribute("replyUpdate",
-	 * replyService.selectReply(replyVo.getRno())); }catch(SQLException e) {
-	 * e.printStackTrace(); }
-	 * 
-	 * return "board/replyUpdateView"; }
-	 */
+	 @GetMapping("/replyUpdateView") 
+	 public String replyUpdateView(ReplyVO replyVo, Model model) throws SQLException{
+		System.out.println("/replyUpdateView - 수정페이지 진입");
+		try { 
+			 model.addAttribute("replyUpdate", replyService.selectReply(replyVo.getRno())); 
+		}catch(SQLException e) {
+			 e.printStackTrace(); 
+		}
+	  
+		return "board/replyUpdateView"; 
+	 }
+	 
 	
 	/* 댓글 수정 : POST */
-	/*
-	 * @PostMapping("/replyUpdate") public String replyUpdate(ReplyVO replyVo,
-	 * RedirectAttributes rttr) throws SQLException{ try {
-	 * replyService.updateReply(replyVo); }catch(SQLException e) {
-	 * e.printStackTrace(); }
-	 * 
-	 * rttr.addAttribute("bno", replyVo.getBno());
-	 * 
-	 * return "redirect:/board/get"; }
-	 */
+	@PostMapping("/replyUpdate") 
+	public String replyUpdate(ReplyVO replyVo,RedirectAttributes rttr) throws SQLException{ 
+		try {
+			replyService.updateReply(replyVo); 
+		}catch(SQLException e) {
+			e.printStackTrace(); 
+		}
+	  
+		rttr.addAttribute("bno", replyVo.getBno());
+	  
+		return "redirect:/board/get"; 
+	}
+	 
 	
 	
 }
