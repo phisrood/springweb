@@ -11,14 +11,15 @@
 		$(document).ready(function(){
 			var formObj = $("form[name='updateForm']");
 			
+			/* 취소버튼 클릭 */
 			$(".cancel_btn").on("click", function(){
 				//location.href = "/board/readView?bno=${replyUpdate.bno}";
 				window.close();
 			})
 			
 			
+			/* 수정버튼 클릭*/
 			$(".update_btn").on("click", function(e){
-	 			console.log(111);
 				var data ={
 						rContent : $("#content").val(),
 						bno : $("#bno").val(),
@@ -30,6 +31,8 @@
 					type : 'POST',
 					url  : '/board/replyUpdate',
 					success : function(result){
+						//팝업창 닫으면서 부모창 새로고침
+						opener.parent.location.reload(); 
 						window.close();
 					}
 				})

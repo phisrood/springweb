@@ -9,6 +9,9 @@ public class ReplyVO {
 	private String rContent ;
 	private String rWriter ;
 	private Date rRegdate ;
+	private int rDepth; 
+	private int rGroup;
+	
 	
 	
 	public int getBno() {
@@ -43,10 +46,23 @@ public class ReplyVO {
 	}
 	
 	
+	public int getrDepth() {
+		return rDepth;
+	}
+	public void setrDepth(int rDepth) {
+		this.rDepth = rDepth;
+	}
+	public int getrGroup() {
+		return rGroup;
+	}
+	public void setrGroup(int rGroup) {
+		this.rGroup = rGroup;
+	}
+	
 	@Override
 	public String toString() {
 		return "ReplyVO [bno=" + bno + ", rno=" + rno + ", rContent=" + rContent + ", rWriter=" + rWriter
-				+ ", rRegdate=" + rRegdate + "]";
+				+ ", rRegdate=" + rRegdate + ", rDepth=" + rDepth + ", rGroup=" + rGroup + "]";
 	}
 	
 	
