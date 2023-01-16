@@ -5,8 +5,7 @@ import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+
 public class BoardVO {
 
     /* 게시판 제목 */
@@ -23,11 +22,16 @@ public class BoardVO {
     private int bno;
     private int rownum;
     
+    /* 댓글 개수 */
+    private int repCount;
     
+    
+	
+
 	@Override
 	public String toString() {
 		return "BoardVO [title=" + title + ", content=" + content + ", writer=" + writer + ", regdate=" + regdate
-				+ ", updateDate=" + updateDate + ", bno=" + bno + ", rownum=" + rownum + "]";
+				+ ", updateDate=" + updateDate + ", bno=" + bno + ", rownum=" + rownum + ", repCount=" + repCount + "]";
 	}
 	
 	public String getTitle() {
@@ -97,4 +101,11 @@ public class BoardVO {
 		this.rownum = rownum;
 	}
     
+	public int getRepCount() {
+		return repCount;
+	}
+
+	public void setRepCount(int repCount) {
+		this.repCount = repCount;
+	}
 }

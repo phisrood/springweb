@@ -64,9 +64,8 @@ public class BoardController {
 			int total = boardService.getTotal();
 			
 			PageMakerDTO pageMaker = new PageMakerDTO(cri, total);
-			
 			model.addAttribute("pageMaker", pageMaker);
-			
+
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}

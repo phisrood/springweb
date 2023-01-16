@@ -13,7 +13,7 @@
   crossorigin="anonymous"></script>
 
 <style type="text/css">
-	.input_wrap{
+	/* .input_wrap{
 		padding: 5px 20px;
 	}
 	label{
@@ -45,55 +45,63 @@
 	    margin-left : 30px;
 	    cursor : pointer;
 	}
+	*/
 	.btn_wrap{
-		padding-left : 80px;
-		margin-top : 50px;
-	}
+		padding-left : -2px;
+		margin-top : 20px;
+	} 
 
 </style>
 </head>
 <body>
-	<h1>상세조회</h1>
-	<form id="modifyForm" action="/board/modify" method="post">
-		<div class="input_wrap">
-			<label>게시판 번호</label>
-			<input name="bno" readonly value='<c:out value="${pageInfo.bno }"/>' />
-		</div>
-		<div class="input_wrap">
-			<label>게시판 제목</label>
-			<input name="title" value='<c:out value="${pageInfo.title }" />' />
-		</div>
-		<div class="input_wrap">
-			<label>게시판 내용</label>
-			<textarea rows="3" name="content" ><c:out value="${pageInfo.content }" /></textarea>
-		</div>
-	</form>
-	<div class="input_wrap">
-		<label>작성자</label>
-		<input name="writer" readonly="readonly" value='<c:out value="${pageInfo.writer}" />' />
+	<div class="container">
+		<h1>상세조회</h1>
+		
+		<section id="container">
+			<form id="modifyForm" action="/board/modify" method="post">
+				<div class="form-group">
+					<label for="bno" class="col-sm2 control-label">게시판 번호</label>
+					<input class="form-control" name="bno" readonly value='<c:out value="${pageInfo.bno }"/>' />
+				</div>
+				<div class="form-group">
+					<label for="title" class="col-sm2 control-label">게시판 제목</label>
+					<input class="form-control" name="title" value='<c:out value="${pageInfo.title }" />' />
+				</div>
+				<div class="form-group">
+					<label for="content" class="col-sm2 control-label">게시판 내용</label>
+					<textarea class="form-control" rows="3" name="content" ><c:out value="${pageInfo.content }" /></textarea>
+				</div>
+			</form>
+			<div class="form-group">
+				<label for="writer" class="col-sm2 control-label">작성자</label>
+				<input class="form-control" name="writer" readonly="readonly" value='<c:out value="${pageInfo.writer}" />' />
+			</div>
+			<div class="form-group">
+				<label for="regdate" class="col-sm2 control-label">등록일</label>
+				<input class="form-control" name="regdate" readonly value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.regdate}"/>' />
+			</div>
+			<div class="form-group">
+				<label for="updateDate" class="col-sm2 control-label">수정일</label>      
+				<input class="form-control" name="updateDate" readonly value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.updateDate}"/>' />
+			</div>
+			<div class="btn_wrap">
+				<a class="btn btn-secondary" id="list_btn">목록</a>
+				<a class="btn btn-warning" id="modify_btn">수정하기</a>
+				<a class="btn btn-danger" id="delete_btn">삭제하기</a>
+				<a class="btn btn-primary" id="cancel_btn">수정취소</a>
+			</div>
+		
+		
+			
+			<form id="infoForm" action="/board/modify" method="get">
+				<input type="hidden" id="bno" name="bno" value='<c:out value="${pageInfo.bno }"/>'/>
+				<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum }"/>' />
+				<input type="hidden" name="amount" value='<c:out value="${cri.amount }"/>' />
+			</form>
+		</section>
+		
 	</div>
-	<div class="input_wrap">
-		<label>등록일</label>
-		<input name="regdate" readonly value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.regdate}"/>' />
-	</div>
-	<div class="input_wrap">
-		<label>수정일</label>      
-		<input name="updateDate" readonly value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.updateDate}"/>' />
-	</div>
-	<div class="btn_wrap">
-		<a class="btn" id="list_btn">목록</a>
-		<a class="btn" id="modify_btn">수정하기</a>
-		<a class="btn" id="delete_btn">삭제하기</a>
-		<a class="btn" id="cancel_btn">수정취소</a>
-	</div>
-
-
 	
-	<form id="infoForm" action="/board/modify" method="get">
-		<input type="hidden" id="bno" name="bno" value='<c:out value="${pageInfo.bno }"/>'/>
-		<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum }"/>' />
-		<input type="hidden" name="amount" value='<c:out value="${cri.amount }"/>' />
-	</form>
 	
 	
 <script>

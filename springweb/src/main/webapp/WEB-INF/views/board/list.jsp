@@ -64,7 +64,7 @@
 	<div class="container">
 		<h1>게시판 목록</h1>
 		<hr/>
-		<a href='/board/insert' class="top_btn">게시판 등록</a>
+		<a href='/board/insert' class="btn_primary">게시판 등록</a>
 		
 		<section id="container">
 			<table class="table table-hover">
@@ -83,6 +83,11 @@
 					<td>
 						<a class="move" href='<c:out value="${list.bno}"/>'>
 							<c:out value="${list.title}"/>
+							<c:if test="${list.repCount ne 0}">
+								<small>
+									<b style="color: #B40431;">[&nbsp;<c:out value="${list.repCount}"/>&nbsp;]</b>
+								</small>
+							</c:if>
 						</a>					
 					</td>
 					<td><c:out value="${list.writer}"/></td>				

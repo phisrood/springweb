@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import web.board.dao.CommonDao;
+import web.board.model.BoardVO;
 import web.board.model.ReplyVO;
 
 @Service("replyService")
@@ -46,7 +47,7 @@ public class ReplyServiceImpl implements ReplyService {
 		commonDao.delete("deleteReply", replyVo);
 		
 	}
-	
+
 	
 
 	

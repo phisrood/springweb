@@ -52,10 +52,11 @@
 	    margin-left : 30px;
 	    cursor : pointer;
 	}
+	*/
 	.btn_wrap{
-		padding-left : 80px;
-		margin-top : 50px;
-	} */
+		padding-left : -2px;
+		margin-top : 20px;
+	} 
 </style>  
 </head>
 <body>
@@ -73,19 +74,19 @@
 			</div>
 			<div class="form-group">
 				<label for="content" class="col-sm2 control-label">게시판 내용</label>
-				<textarea class="form-control" rows="3" name="content" readonly="readonly"><c:out value="${pageInfo.content }" /></textarea>
+				<textarea class="form-control" rows="10" name="content" readonly="readonly"><c:out value="${pageInfo.content }" /></textarea>
 			</div>
 			<div class="form-group">
 				<label for="writer" class="col-sm2 control-label">작성자</label>
 				<input class="form-control" name="writer" readonly="readonly" value='<c:out value="${pageInfo.writer}" />' />
 			</div>
 			<div class="form-group">
-				<label for="regdate" class="">등록일</label>
-				<input name="regdate" readonly="readonly" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.regdate}"/>' />
+				<label for="regdate" class="col-sm2 control-label">등록일</label>
+				<input class="form-control" name="regdate" readonly="readonly" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.regdate}"/>' />
 			</div>
 			<div class="form-group">
-				<label for="updateDate" class="">수정일</label>
-				<input name="updateDate" readonly="readonly" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.updateDate}"/>' />
+				<label for="updateDate" class="col-sm2 control-label">수정일</label>
+				<input class="form-control" name="updateDate" readonly="readonly" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.updateDate}"/>' />
 			</div>
 			<div class="form-group">
 				<label>첨부파일</label>
@@ -93,22 +94,36 @@
 					<a href="#" onclick="fn_fileDown('${file.FILE_NO}'); return false;">${file.ORG_FILE_NAME}</a>(${file.FILE_SIZE}kb)<br>
 				</c:forEach>
 			</div>
-			<div>
-				<a class="btn" id="list_btn">목록</a>
-				<a class="btn" id="modify_btn">수정하기</a>
+			<div class="btn_wrap">
+				<a class="btn btn-secondary" id="list_btn">목록</a>
+				<a class="btn btn-warning" id="modify_btn">수정하기</a>
 			</div>
 			
 			<hr/>
 			
-			<form name="replyForm" method="post">
+			<form name="replyForm" method="post" class="form-horizontal">
 				<input type="hidden" id="bno" name="bno" value='<c:out value="${pageInfo.bno }"/>' />
 				<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>' />
 				<input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>' />
-				<div>
-					<label>댓글 작성자</label><input type="text" id="rWriter" name="rWriter" />
-					<label>댓글 내용</label><input type="text" id="rContent" name="rContent" />
+				
+				<div class="form-group">
+					<label for="rWriter" class="col-sm-2 control-label">댓글 작성자</label>
+					<div class="col-sm-2">				
+						<input class="form-control" type="text" id="rWriter" name="rWriter" />
+					</div>
+				</div>	
+				<div class="form-group">
+					<label for="rContent" class="col-sm-2 control-label">댓글 내용</label>
+					<div class="col-sm-10">				
+						<input class="form-control" type="text" id="rContent" name="rContent"/>
+					</div>
 				</div>
-				<button type="button" class="replyWriteBtn">댓글작성</button>
+
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="button" class="btn btn-success" id="replyWriteBtn">댓글작성</button>
+					</div>			
+				</div>
 			</form>
 		
 			<!-- 댓글 -->
@@ -122,8 +137,8 @@
 							</p>
 							<p>${replyList.rContent}</p>
 							<div>
-								<button type="button" class="replyUpdateBtn" data-rno="${replyList.rno }">수정</button>
-								<button type="button" class="replyDeleteBtn" data-rno="${replyList.rno }">삭제</button>
+								<button type="button" class="replyUpdateBtn btn btn-warning" data-rno="${replyList.rno }">수정</button>
+								<button type="button" class="replyDeleteBtn btn btn-danger" data-rno="${replyList.rno }">삭제</button>
 							</div>
 						</li>
 					</c:forEach>
@@ -166,7 +181,7 @@
 	}
 	
 	/* 댓글 작성버튼 클릭 */
-	$(".replyWriteBtn").on("click", function(){
+	$("#replyWriteBtn").on("click", function(){
 		var formReply = $("form[name='replyForm']");
 		formReply.attr("action","/board/writeReply");
 		formReply.submit();

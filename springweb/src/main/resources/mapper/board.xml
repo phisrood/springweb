@@ -14,8 +14,10 @@
 	
 	<!-- 게시판 목록조회 -->
 	<select id="getList" resultType="web.board.model.BoardVO">
-		SELECT ROWNUM, BNO, TITLE, WRITER, CONTENT 
-		FROM YUNBOARD 
+		<!-- SELECT ROWNUM, BNO, TITLE, WRITER, CONTENT 
+		FROM YUNBOARD  -->
+		SELECT ROWNUM, BNO, TITLE, WRITER, CONTENT
+		FROM YUNBOARD B 
 	</select>
 	
 	<!-- 게시판 목록(페이징) -->
@@ -29,8 +31,11 @@
 	        ORDER BY ROWNUM DESC
 	    ]]>  -->   
 	    <![CDATA[
-	    	SELECT ROWNUM , BNO,TITLE, CONTENT, WRITER, REGDATE, UPDATEDATE 
-			FROM YUNBOARD  ORDER BY bno DESC offset (#{pageNum}-1)*10 ROWS FETCH NEXT #{amount} ROWS ONLY		
+	    	SELECT ROWNUM , BNO,TITLE, CONTENT, WRITER, REGDATE, UPDATEDATE,
+	    	       (SELECT COUNT(*)
+					FROM YUN_REPLY R
+					WHERE R.BNO  = B.BNO ) AS repCount  	
+			FROM YUNBOARD B ORDER BY BNO DESC offset (#{pageNum}-1)*10 ROWS FETCH NEXT #{amount} ROWS ONLY		
 	    ]]>
 	     
     </select>
@@ -55,7 +60,7 @@
 		FROM YUNBOARD 
 		WHERE BNO = #{bno}
 	</select>
-	
+
 	<!-- 첨부파일 업로드 -->
 	<insert id="insertFile" parameterType="hashMap">
 		INSERT INTO YUN_FILE(FILE_NO, BNO, ORG_FILE_NAME, STORED_FILE_NAME, FILE_SIZE)
