@@ -1,9 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
-
 
 <!DOCTYPE html>
 <html>
@@ -17,47 +14,13 @@
 <!-- 부가적인 테마 -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
-
-
 <style type="text/css">
-/* 	.input_wrap{
-		padding: 5px 20px;
-	}
-	label{
-	    display: block;
-	    margin: 10px 0;
-	    font-size: 20px;	
-	}
-	input{
-		padding: 5px;
-	    font-size: 17px;
-	}
-	textarea{
-		width: 800px;
-	    height: 200px;
-	    font-size: 15px;
-	    padding: 10px;
-	}
-	.btn{
-	  	display: inline-block;
-	    font-size: 22px;
-	    padding: 6px 12px;
-	    background-color: #fff;
-	    border: 1px solid #ddd;
-	    font-weight: 600;
-	    width: 140px;
-	    height: 41px;
-	    line-height: 39px;
-	    text-align : center;
-	    margin-left : 30px;
-	    cursor : pointer;
-	}
-	*/
 	.btn_wrap{
 		padding-left : -2px;
 		margin-top : 20px;
 	} 
 </style>  
+
 </head>
 <body>
 	<div class="container">
@@ -101,10 +64,14 @@
 			
 			<hr/>
 			
+			<!-- 댓글 -->
 			<form name="replyForm" method="post" class="form-horizontal">
-				<input type="hidden" id="bno" name="bno" value='<c:out value="${pageInfo.bno }"/>' />
-				<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>' />
-				<input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>' />
+				<input type="hidden" id="bno"     name="bno" value='<c:out value="${pageInfo.bno }"/>' />
+				<input type="hidden" id="pageNum" name="pageNum" value='<c:out value="${cri.pageNum}"/>' />
+				<input type="hidden" id="amount"  name="amount" value='<c:out value="${cri.amount}"/>' />
+				
+				<input type="hidden" id="rDepth" name="rDepth" value='0' />
+				
 				
 				<div class="form-group">
 					<label for="rWriter" class="col-sm-2 control-label">댓글 작성자</label>
@@ -126,7 +93,7 @@
 				</div>
 			</form>
 		
-			<!-- 댓글 -->
+			<!-- 댓글 목록 -->
 			<div id="reply">
 				<ol class="replyList">
 					<c:forEach items="${replyList}" var="replyList">
@@ -139,11 +106,14 @@
 							<div>
 								<button type="button" class="replyUpdateBtn btn btn-warning" data-rno="${replyList.rno }">수정</button>
 								<button type="button" class="replyDeleteBtn btn btn-danger" data-rno="${replyList.rno }">삭제</button>
+								<button type="button" class="replyInsertBtn btn btn-primary" data-rno="${replyList.rno }">답글</button>
 							</div>
 						</li>
+						<div id="reReplyList" ></div>
 					</c:forEach>
 				</ol>
 			</div>
+			
 	
 			<form id="infoForm" action="/board/modify" method="get">
 				<input type="hidden" id="bno" name="bno" value='<c:out value="${pageInfo.bno }"/>'/>
@@ -182,15 +152,38 @@
 	
 	/* 댓글 작성버튼 클릭 */
 	$("#replyWriteBtn").on("click", function(){
-		var formReply = $("form[name='replyForm']");
+		/* var formReply = $("form[name='replyForm']");
 		formReply.attr("action","/board/writeReply");
-		formReply.submit();
+		formReply.submit(); */
+		var bno = $("#bno").val() ;
+		var rWriter = $("#rWriter").val() ; 
+		var rContent = $("#rContent").val() ;
+		
+		var depth = $("#rDepth").val() ;
+		var rDepth = Number(depth);
+
+		var data = {
+				 bno : bno
+				,rWriter : rWriter	
+				,rContent : rContent
+				,rDepth : rDepth
+		}
+		
+		$.ajax({
+			 data : data
+			,type : 'POST'
+			,url  : '/board/writeReply'
+			,success : function(result){
+				var replyHtml = "";
+			}	
+		});
+		
+		
+		
 	});
 	
 	/* 댓글 수정 view 이동 버튼 */
 	$(".replyUpdateBtn").on("click", function(){
-
-		//location.href= "/board/replyUpdateView?bno=${pageInfo.bno}&rno="+$(this).attr("data-rno");
 		var popUrl = "/board/replyUpdateView?bno=${pageInfo.bno}&rno="+$(this).attr("data-rno");
 		var popOption = "width=490px, height=490px, top=300px, left=300px, scrollbars=yes";
 		
@@ -211,8 +204,16 @@
 			formReply.attr("method", "post");
 			formReply.submit();
 		}
+	});
+	
+
+	
+	/* 답글달기 버튼 */
+	$(".replyInsertBtn").on("click", function(){
+		var popUrl = "/board/reReplyInsertView?bno=${pageInfo.bno}&rno="+$(this).attr("data-rno");
+		var popOption = "width=490px, height=490px, top=300px, left=300px, scrollbars=yes";
 		
-		
+		window.open(popUrl, "답글달기", popOption);
 	});
 	
 </script>

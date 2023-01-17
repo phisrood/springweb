@@ -4,16 +4,28 @@
 
 	<!-- 댓글 조회 -->
 	<select id="readReply" resultType="web.board.model.ReplyVO">
-		SELECT RNO, RCONTENT, RWRITER, RREGDATE 
+		<!-- SELECT RNO, RCONTENT, RWRITER, RREGDATE 
 		FROM YUN_REPLY 
 		WHERE BNO = #{bno} 
+		ORDER BY RREGDATE DESC -->
+		SELECT BNO, RNO, RGROUP, RDEPTH, LEVEL, RCONTENT, RWRITER, RREGDATE 
+		FROM YUN_REPLY 
+		WHERE BNO = #{bno}
+		START WITH RGROUP IS null
+		CONNECT BY PRIOR RNO = RGROUP
 		ORDER BY RREGDATE DESC
 	</select>
 
 	<!-- 댓글 등록 -->
 	<insert id="writeReply">
-		INSERT INTO YUN_REPLY (BNO, RNO, RCONTENT, RWRITER) 
-				VALUES (#{bno}, YUN_REPLY_SEQ.NEXTVAL, #{rContent}, #{rWriter})
+		INSERT INTO YUN_REPLY (BNO, RNO, RCONTENT, RWRITER, RDEPTH) 
+				VALUES (#{bno}, YUN_REPLY_SEQ.NEXTVAL, #{rContent}, #{rWriter}, #{rDepth})
+	</insert>
+	
+	<!-- 답글 등록 -->
+	<insert id="reWriteReply">
+		INSERT INTO YUN_REPLY (BNO, RNO, RCONTENT, RWRITER, RDEPTH, RGROUP) 
+				VALUES (#{bno}, YUN_REPLY_SEQ.NEXTVAL, #{rContent}, #{rWriter}, #{rDepth}, #{rno})	
 	</insert>
 	
 	<!-- 댓글 수정 -->
@@ -31,4 +43,5 @@
 	<delete id="deleteReply" parameterType="web.board.model.ReplyVO">
 		DELETE FROM YUN_REPLY WHERE RNO = #{rno}
 	</delete>
+	
 </mapper>

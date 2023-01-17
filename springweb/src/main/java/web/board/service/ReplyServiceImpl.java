@@ -48,6 +48,13 @@ public class ReplyServiceImpl implements ReplyService {
 		
 	}
 
+	/* 답글 등록 */
+	@Override
+	public void reWriteReply(ReplyVO replyVo) throws SQLException {
+		commonDao.insert("reWriteReply", replyVo);
+		
+	}
+
 	
 
 	

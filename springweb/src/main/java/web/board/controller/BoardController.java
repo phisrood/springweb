@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -94,6 +95,7 @@ public class BoardController {
 	
 	/* 상세조회 */
 	@GetMapping("/get")
+	@ResponseBody
 	public void boardGetPageGET(int bno, Model model, Criteria cri) {
 		try {
 			model.addAttribute("pageInfo", boardService.getPage(bno));
@@ -103,7 +105,6 @@ public class BoardController {
 			model.addAttribute("file", fileList);
 			
 			List<ReplyVO> replyList = replyService.readReply(bno);
-			
 			model.addAttribute("replyList", replyList);
 			
 		} catch (SQLException e) {
@@ -169,6 +170,7 @@ public class BoardController {
 		response.getOutputStream().close();
 	}
 	
+	/****************************************************************************************************************************/
 	/* 댓글 작성 */
 	@PostMapping("/writeReply")
 	public String writeReply(ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
@@ -227,7 +229,28 @@ public class BoardController {
 		
 		return "redirect:/board/get";
 	}
-	 
+
 	
+	
+	 /* 답변 등록창: GET */
+	 @GetMapping("/reReplyInsertView") 
+	 public String replyInsertView(ReplyVO replyVo, Model model) throws SQLException{
+		System.out.println("/replyInsertView - 답변 등록페이지 진입");
+
+		model.addAttribute("replyList", replyVo);
+
+		return "board/replyInsertView"; 
+	 }
+
+	 /* 답변 등록: POST */
+	 @PostMapping("/reReplyInsert")
+	 public String reReplyInsert(ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
+		 
+		 replyService.reWriteReply(replyVo);
+		 
+		 rttr.addAttribute("bno", replyVo.getBno());
+		 
+		 return "redirect:/board/get";
+	 }
 	
 }
