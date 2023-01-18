@@ -96,7 +96,7 @@
 			<!-- 댓글 목록 -->
 			<div id="reply">
 				<ol class="replyList">
-					<c:forEach items="${replyList}" var="replyList">
+					<c:forEach items="${replyList}" var="replyList" varStatus="status">
 						<li>
 							<p>
 								작성자: ${replyList.rWriter}<br/>
@@ -106,10 +106,11 @@
 							<div>
 								<button type="button" class="replyUpdateBtn btn btn-warning" data-rno="${replyList.rno }">수정</button>
 								<button type="button" class="replyDeleteBtn btn btn-danger" data-rno="${replyList.rno }">삭제</button>
-								<button type="button" class="replyInsertBtn btn btn-primary" data-rno="${replyList.rno }">답글</button>
+								<button type="button" class="replyInsertBtn btn btn-primary" data-no="${status.count}" data-rno="${replyList.rno }">답글</button>
 							</div>
+							
+							<div style="margin:7px 10px 8px 12px; " class="reReplyList${status.count }" hidden></div>							
 						</li>
-						<div id="reReplyList" ></div>
 					</c:forEach>
 				</ol>
 			</div>
@@ -128,6 +129,10 @@
 
 	
 <script>
+	$(function(){
+
+	});
+
 	var form = $("#infoForm");
 	
 	/* 목록버튼 클릭 */
@@ -152,33 +157,10 @@
 	
 	/* 댓글 작성버튼 클릭 */
 	$("#replyWriteBtn").on("click", function(){
-		/* var formReply = $("form[name='replyForm']");
-		formReply.attr("action","/board/writeReply");
-		formReply.submit(); */
-		var bno = $("#bno").val() ;
-		var rWriter = $("#rWriter").val() ; 
-		var rContent = $("#rContent").val() ;
-		
-		var depth = $("#rDepth").val() ;
-		var rDepth = Number(depth);
 
-		var data = {
-				 bno : bno
-				,rWriter : rWriter	
-				,rContent : rContent
-				,rDepth : rDepth
-		}
-		
-		$.ajax({
-			 data : data
-			,type : 'POST'
-			,url  : '/board/writeReply'
-			,success : function(result){
-				var replyHtml = "";
-			}	
-		});
-		
-		
+		var formReply = $("form[name='replyForm']");
+		formReply.attr("action","/board/writeReply");
+		formReply.submit();
 		
 	});
 	
@@ -198,23 +180,44 @@
 			var formReply = $("form[name='replyForm']");
 			
 			formReply.append("<input type='hidden' name='rno' value='"+ $(this).attr("data-rno") +"'>");
-			//formReply.append("input[name='replyForm']").val($(this).attr("data-rno"));
-			
+
 			formReply.attr("action", "/board/replyDelete");
 			formReply.attr("method", "post");
 			formReply.submit();
 		}
 	});
 	
-
 	
+	
+
 	/* 답글달기 버튼 */
-	$(".replyInsertBtn").on("click", function(){
+	$(".replyInsertBtn").on("click", function(){		
+		$(".reReplyList"+$(this).data('no')).prop('hidden',!$(".reReplyList"+$(this).data('no')).prop('hidden'));
+		
+		var html = "";
+		
+		html += "<div style='padding-top: 14px;padding-left: 25px;padding-bottom: 14px;border-right-width: 0px;margin-right: 0px;margin-left: 60px; background-color: aliceblue;'>" ;
+		html += "	<div>" ;
+		html += "		<label for='rWriter'>댓글작성자</label>	" ;
+		html += "		<input style='width: 100px; margin-left: 10px;' type='text' name='rWriter' id='rWriter'/>"	;
+		html += "	</div>" ;
+		html += "	<div>" ;
+		html += "		<label style='margin-left: 12px;' for='rContent'>댓글내용</label>" ;
+		html += "		<input style='margin-left: 12px; width: 735px;' type='text' name='rContent' id='rContent'/>" ;
+		html += "	</div>"
+		html += "	<div style='margin-left: 84px; margin-top: 3px;'>"		
+		html += "		<input type='button' class='btn btn-info'  value='답글등록' />"
+		html += "	</div>"
+		html += "</div>";
+							
+		$(".reReplyList"+$(this).data('no')).html(html);
+
 		var popUrl = "/board/reReplyInsertView?bno=${pageInfo.bno}&rno="+$(this).attr("data-rno");
 		var popOption = "width=490px, height=490px, top=300px, left=300px, scrollbars=yes";
 		
-		window.open(popUrl, "답글달기", popOption);
+		//window.open(popUrl, "답글달기", popOption);
 	});
+
 	
 </script>
 </body>

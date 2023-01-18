@@ -21,6 +21,8 @@
 			
 			/* 등록버튼 체크*/
 			$("#insert_btn").on("click", function(e){
+				var form = $("#infoForm") ; 
+				
 				var title      = $('#title').val();
 				var content    = $('#content').val();
 				var writer     = $('#writer').val(); 
@@ -29,11 +31,14 @@
 					alert('입력해줘');
 					return false;
 				}
+				
+				form.submit();
+				
 			}); 
 			
 			/* 목록버튼 클릭 */
 			$("#list_btn").on("click", function(e){
-				location.href="/board/list"
+				location.href="/board/list" ;
 			});
 		});
 	</script>
@@ -58,14 +63,13 @@
 					<label for="uploadFile" class="col-sm-2 control-label">업로드</label>
 					<input class="form-control" type="file" name="uploadFile" id="uploadFile"/>
 				</div>
-				<div class="form-group">
-					<div class="btn_wrap">
-						<button class="btn btn-secondary" id="list_btn">목록</button>
-						<button class="btn btn-primary" id="insert_btn">등록</button>
-					</div>
-				</div>
 			</form>
-			
+			<div class="form-group">
+				<div class="btn_wrap">
+					<button class="btn btn-secondary" id="list_btn">목록</button>
+					<button class="btn btn-primary" id="insert_btn">등록</button>
+				</div>
+			</div>
 		</section>
 	</div>
 	

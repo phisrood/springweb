@@ -56,7 +56,7 @@ public class BoardController {
 	}*/
 	/* 게시판 목록 페이지 접속(페이징 적용) */
 	@GetMapping("/list")
-	public void boardListGET(Model model, Criteria cri) {
+	public void boardListGET(BoardVO boardVo ,Model model, Criteria cri) {
 		System.out.println("/board/list - 게시판 목록 진입");
 		try {
 			List<BoardVO> list = boardService.getListPaging(cri);
@@ -95,7 +95,6 @@ public class BoardController {
 	
 	/* 상세조회 */
 	@GetMapping("/get")
-	@ResponseBody
 	public void boardGetPageGET(int bno, Model model, Criteria cri) {
 		try {
 			model.addAttribute("pageInfo", boardService.getPage(bno));

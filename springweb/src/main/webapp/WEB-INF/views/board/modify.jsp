@@ -13,39 +13,6 @@
   crossorigin="anonymous"></script>
 
 <style type="text/css">
-	/* .input_wrap{
-		padding: 5px 20px;
-	}
-	label{
-	    display: block;
-	    margin: 10px 0;
-	    font-size: 20px;	
-	}
-	input{
-		padding: 5px;
-	    font-size: 17px;
-	}
-	textarea{
-		width: 800px;
-	    height: 200px;
-	    font-size: 15px;
-	    padding: 10px;
-	}
-	.btn{
-	  	display: inline-block;
-	    font-size: 22px;
-	    padding: 6px 12px;
-	    background-color: #fff;
-	    border: 1px solid #ddd;
-	    font-weight: 600;
-	    width: 140px;
-	    height: 41px;
-	    line-height: 39px;
-	    text-align : center;
-	    margin-left : 30px;
-	    cursor : pointer;
-	}
-	*/
 	.btn_wrap{
 		padding-left : -2px;
 		margin-top : 20px;

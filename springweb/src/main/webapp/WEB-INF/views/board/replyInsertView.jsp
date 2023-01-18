@@ -13,8 +13,7 @@
 	<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script>
 	$(document).ready(function(){
-		var form = $("#infoForm");	
-		
+
 		$('.update_btn').on("click", function(){
 			console.log(1111);
 			var rWriter = $("#rWriter").val() ;
