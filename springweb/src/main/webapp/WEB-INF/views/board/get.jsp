@@ -108,8 +108,7 @@
 								<button type="button" class="replyDeleteBtn btn btn-danger" data-rno="${replyList.rno }">삭제</button>
 								<button type="button" class="replyInsertBtn btn btn-primary" data-no="${status.count}" data-rno="${replyList.rno }">답글</button>
 							</div>
-							
-							<div style="margin:7px 10px 8px 12px; " class="reReplyList${status.count }" hidden></div>							
+							<div style="margin:7px 10px 8px 12px; " class="reReplyList${status.count }" hidden></div>					
 						</li>
 					</c:forEach>
 				</ol>
@@ -197,28 +196,58 @@
 		var html = "";
 		
 		html += "<div style='padding-top: 14px;padding-left: 25px;padding-bottom: 14px;border-right-width: 0px;margin-right: 0px;margin-left: 60px; background-color: aliceblue;'>" ;
-		html += "	<div>" ;
-		html += "		<label for='rWriter'>댓글작성자</label>	" ;
-		html += "		<input style='width: 100px; margin-left: 10px;' type='text' name='rWriter' id='rWriter'/>"	;
-		html += "	</div>" ;
-		html += "	<div>" ;
-		html += "		<label style='margin-left: 12px;' for='rContent'>댓글내용</label>" ;
-		html += "		<input style='margin-left: 12px; width: 735px;' type='text' name='rContent' id='rContent'/>" ;
-		html += "	</div>"
-		html += "	<div style='margin-left: 84px; margin-top: 3px;'>"		
-		html += "		<input type='button' class='btn btn-info'  value='답글등록' />"
-		html += "	</div>"
+		html += "	<form name='reReplyForm' action='/board/reReplyInsert' method='post'>" ;
+		html += "		<div>" ;
+		html += "			<label for='rWriter'>댓글작성자</label>	" ;
+		html += "			<input style='width: 100px; margin-left: 10px;' type='text' name='rWriter' id='reWriter'/>"	;
+		html += "		</div>" ;
+		html += "		<div>" ;
+		html += "			<label style='margin-left: 12px;' for='rContent'>댓글내용</label>" ;
+		html += "			<input style='margin-left: 12px; width: 735px;' type='text' name='rContent' id='reContent'/>" ;
+		html += "		</div>"
+		html += "		<div style='margin-left: 84px; margin-top: 3px;'>"		
+		html += "			<input type='button' class='btn btn-info'  value='답글등록' onclick='test(\""+$(this).attr('data-rno')+"\",\""+${pageInfo.bno }+"\"); '/>"
+		html += "		</div>"
+		html += "	</form>";
+		
+		html += "	<div>";
+		html += "		<c:forEach items='${reReplyList}' var='reReplyList'> "
+		html += "			<hr style='border-block-color: inherit;'>"
+		html += "			<p>"
+		html += "				작성자: ${reReplyList.rWriter} <br/>"
+		html += "				작성일자:<fmt:formatDate value='${reReplyList.rRegdate}' pattern='yyyy-MM-dd'/>"
+		html += "				<p>${reReplyList.rContent}</p>"
+		html += "			</p>"
+		html += "		</c:forEach>"
+		html += "	</div>"; 
 		html += "</div>";
-							
+						
+
 		$(".reReplyList"+$(this).data('no')).html(html);
 
-		var popUrl = "/board/reReplyInsertView?bno=${pageInfo.bno}&rno="+$(this).attr("data-rno");
-		var popOption = "width=490px, height=490px, top=300px, left=300px, scrollbars=yes";
-		
+
+		//var popUrl = "/board/reReplyInsertView?bno=${pageInfo.bno}&rno="+$(this).attr("data-rno");
+		//var popOption = "width=490px, height=490px, top=300px, left=300px, scrollbars=yes";
 		//window.open(popUrl, "답글달기", popOption);
 	});
 
-	
+	/* 답글 등록 */
+	function test(rno, bno){
+		console.log(rno,bno)
+		var rWriter = $("#reWriter").val() ;
+		var rContent = $("#reContent").val();
+
+		if((rWriter == null || rWriter == '')||(rContent == null || rContent == '')){
+			alert("입력해줘");
+			return false;
+		}
+		
+		var form = $("form[name='reReplyForm']");
+		form.append("<input type='hidden' name='rno' value='"+rno+"' />");
+		form.append("<input type='hidden' name='bno' value='"+bno+"' />");
+		form.append("<input type='hidden' name='rDepth' value='1' />");
+		form.submit();
+	}
 </script>
 </body>
 </html>

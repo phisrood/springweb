@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -105,6 +103,9 @@ public class BoardController {
 			
 			List<ReplyVO> replyList = replyService.readReply(bno);
 			model.addAttribute("replyList", replyList);
+			
+			List<ReplyVO> reReplyList = replyService.reReplyList(bno);
+			model.addAttribute("reReplyList", reReplyList);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

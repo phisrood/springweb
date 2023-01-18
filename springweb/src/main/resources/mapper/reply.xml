@@ -11,6 +11,7 @@
 		SELECT BNO, RNO, RGROUP, RDEPTH, LEVEL, RCONTENT, RWRITER, RREGDATE 
 		FROM YUN_REPLY 
 		WHERE BNO = #{bno}
+		AND RDEPTH = 0
 		START WITH RGROUP IS null
 		CONNECT BY PRIOR RNO = RGROUP
 		ORDER BY RREGDATE DESC
@@ -20,12 +21,6 @@
 	<insert id="writeReply">
 		INSERT INTO YUN_REPLY (BNO, RNO, RCONTENT, RWRITER, RDEPTH) 
 				VALUES (#{bno}, YUN_REPLY_SEQ.NEXTVAL, #{rContent}, #{rWriter}, #{rDepth})
-	</insert>
-	
-	<!-- 답글 등록 -->
-	<insert id="reWriteReply">
-		INSERT INTO YUN_REPLY (BNO, RNO, RCONTENT, RWRITER, RDEPTH, RGROUP) 
-				VALUES (#{bno}, YUN_REPLY_SEQ.NEXTVAL, #{rContent}, #{rWriter}, #{rDepth}, #{rno})	
 	</insert>
 	
 	<!-- 댓글 수정 -->
@@ -43,5 +38,22 @@
 	<delete id="deleteReply" parameterType="web.board.model.ReplyVO">
 		DELETE FROM YUN_REPLY WHERE RNO = #{rno}
 	</delete>
+	
+	
+	<!-- 답글 등록 -->
+	<insert id="reWriteReply">
+		INSERT INTO YUN_REPLY (BNO, RNO, RCONTENT, RWRITER, RDEPTH, RGROUP) 
+				VALUES (#{bno}, YUN_REPLY_SEQ.NEXTVAL, #{rContent}, #{rWriter}, #{rDepth}, #{rno})	
+	</insert>
+	
+	<!-- 답글 조회 -->
+	<select id="reReplyList" resultType="web.board.model.ReplyVO">
+		SELECT BNO, RNO, RGROUP, RDEPTH, LEVEL, RCONTENT, RWRITER, RREGDATE 
+		FROM YUN_REPLY 
+		WHERE BNO = #{bno}
+		AND RDEPTH = 1
+		START WITH RGROUP IS null
+		CONNECT BY PRIOR RNO = RGROUP
+	</select>
 	
 </mapper>

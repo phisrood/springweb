@@ -55,6 +55,12 @@ public class ReplyServiceImpl implements ReplyService {
 		
 	}
 
+	/* 답글 목록 조회 */
+	@Override
+	public List<ReplyVO> reReplyList(int bno) throws SQLException {
+		return commonDao.selectList("reReplyList", bno);
+	}
+
 	
 
 	
