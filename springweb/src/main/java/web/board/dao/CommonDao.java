@@ -80,4 +80,6 @@ public class CommonDao {
 		sqlSession.update("updateFile", map);
 	}
 
+
+
 }

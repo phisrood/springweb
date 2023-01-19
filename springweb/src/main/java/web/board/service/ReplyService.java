@@ -21,6 +21,6 @@ public interface ReplyService {
 	/* 답글 등록 */
 	public void reWriteReply(ReplyVO replyVo) throws SQLException;
 	/* 답글 목록 */
-	public List<ReplyVO> reReplyList(int bno) throws SQLException;
+//	public List<ReplyVO> reReplyList(ReplyVO replyVo) throws SQLException;
 
 }

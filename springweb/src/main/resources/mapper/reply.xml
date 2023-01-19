@@ -11,10 +11,9 @@
 		SELECT BNO, RNO, RGROUP, RDEPTH, LEVEL, RCONTENT, RWRITER, RREGDATE 
 		FROM YUN_REPLY 
 		WHERE BNO = #{bno}
-		AND RDEPTH = 0
 		START WITH RGROUP IS null
 		CONNECT BY PRIOR RNO = RGROUP
-		ORDER BY RREGDATE DESC
+		ORDER SIBLINGS BY RREGDATE
 	</select>
 
 	<!-- 댓글 등록 -->
@@ -47,13 +46,17 @@
 	</insert>
 	
 	<!-- 답글 조회 -->
-	<select id="reReplyList" resultType="web.board.model.ReplyVO">
+	<select id="reReplyList" resultType="web.board.model.ReplyVO" parameterType="web.board.model.ReplyVO">
 		SELECT BNO, RNO, RGROUP, RDEPTH, LEVEL, RCONTENT, RWRITER, RREGDATE 
 		FROM YUN_REPLY 
 		WHERE BNO = #{bno}
 		AND RDEPTH = 1
 		START WITH RGROUP IS null
 		CONNECT BY PRIOR RNO = RGROUP
+<!-- 		SELECT BNO, RNO, RGROUP, RDEPTH
+		FROM YUN_REPLY
+		WHERE BNO = #{bno}
+		AND RGROUP = #{rno} -->
 	</select>
 	
 </mapper>

@@ -12,8 +12,6 @@ public class ReplyVO {
 	private int rDepth; 
 	private int rGroup;
 	
-	
-	
 	public int getBno() {
 		return bno;
 	}

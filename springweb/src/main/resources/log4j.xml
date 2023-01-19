@@ -51,6 +51,10 @@
 		<level value="warn" />
 	</logger>
 	
+	<logger name="jdbc.resultsettable">
+		<level value="debug" />
+	</logger>
+	
 	<logger name="jdbc.connection">
 		<level value="warn" />
 	</logger>

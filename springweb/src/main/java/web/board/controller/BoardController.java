@@ -93,7 +93,7 @@ public class BoardController {
 	
 	/* 상세조회 */
 	@GetMapping("/get")
-	public void boardGetPageGET(int bno, Model model, Criteria cri) {
+	public void boardGetPageGET(ReplyVO replyVo, int bno, Model model, Criteria cri) {
 		try {
 			model.addAttribute("pageInfo", boardService.getPage(bno));
 			model.addAttribute("cri", cri);
@@ -104,8 +104,8 @@ public class BoardController {
 			List<ReplyVO> replyList = replyService.readReply(bno);
 			model.addAttribute("replyList", replyList);
 			
-			List<ReplyVO> reReplyList = replyService.reReplyList(bno);
-			model.addAttribute("reReplyList", reReplyList);
+//			List<ReplyVO> reReplyList = replyService.reReplyList(replyVo);
+//			model.addAttribute("reReplyList", reReplyList);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
