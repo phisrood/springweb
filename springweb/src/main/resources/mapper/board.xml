@@ -22,19 +22,12 @@
 	
 	<!-- 게시판 목록(페이징) -->
 	<select id="getListPaging" resultType="web.board.model.BoardVO">
-	  <!--   <![CDATA[
-	        SELECT ROWNUM, BNO, TITLE, CONTENT, WRITER, REGDATE, UPDATEDATE FROM(	        
-	                SELECT /*+INDEX_DESC(YUNBOARD pk_board1) */ ROWNUM  as rn, 
-	                       BNO, TITLE, CONTENT, WRITER, REGDATE, UPDATEDATE	                  
-	                FROM YUNBOARD where ROWNUM <= #{pageNum} * #{amount}) 	                
-	        WHERE rn > (#{pageNum} -1) * #{amount}
-	        ORDER BY ROWNUM DESC
-	    ]]>  -->   
 	    <![CDATA[
 	    	SELECT ROWNUM , BNO,TITLE, CONTENT, WRITER, REGDATE, UPDATEDATE,
 	    	       (SELECT COUNT(*)
 					FROM YUN_REPLY R
-					WHERE R.BNO  = B.BNO ) AS repCount  	
+					WHERE R.BNO  = B.BNO
+					AND RDEPTH = 0       ) AS repCount  	
 			FROM YUNBOARD B ORDER BY BNO DESC offset (#{pageNum}-1)*10 ROWS FETCH NEXT #{amount} ROWS ONLY		
 	    ]]>
 	     

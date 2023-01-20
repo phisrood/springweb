@@ -142,13 +142,16 @@
 					return ;
 				}
 				if(result === 'insert success'){
-					alert("등록이 완료되었습니다.");
+					alert("등록이 완료되었습니다.");	
+					location.replace("/board/list");
 				}
 				if(result === 'modify success'){
 					alert("수정이 완료되었습니다.");
+					location.replace("/board/list");
 				}
 				if(result === 'delete success'){
 					alert("삭제가 완료되었습니다.");
+					location.replace("/board/list");
 				}
 			}
 		});
