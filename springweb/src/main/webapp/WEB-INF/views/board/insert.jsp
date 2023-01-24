@@ -40,9 +40,19 @@
 			$("#list_btn").on("click", function(e){
 				location.href="/board/list" ;
 			});
+			
+			
+			$("#uploadFile").change(function(){
+				   if(this.files && this.files[0]) {
+				    var reader = new FileReader;
+				    reader.onload = function(data) {
+				     $(".select_img img").attr("src", data.target.result).width(500);        
+				    }
+				    reader.readAsDataURL(this.files[0]);
+				   }
+			});
 		});
 	</script>
-	
 	<div class="container">
 		<h1>게시판 등록</h1>
 		<section id="container">
@@ -57,11 +67,13 @@
 				</div>
 				<div class="form-group">
 					<label for="writer" class="col-sm-2 control-label">작성자</label>
-					<input class="form-control" name="writer" id="writer"/>
+					<input class="form-control" name="writer" id="writer" value="${member.user_id }" readonly="readonly"/>
 				</div>
 				<div class="form-group">
 					<label for="uploadFile" class="col-sm-2 control-label">업로드</label>
 					<input class="form-control" type="file" name="uploadFile" id="uploadFile"/>
+					<div class="select_img"><img src=""/></div>
+					<%=request.getRealPath("/") %>
 				</div>
 			</form>
 			<div class="form-group">

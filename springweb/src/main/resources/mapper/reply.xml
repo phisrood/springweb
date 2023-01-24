@@ -4,10 +4,6 @@
 
 	<!-- 댓글 조회 -->
 	<select id="readReply" resultType="web.board.model.ReplyVO">
-		<!-- SELECT RNO, RCONTENT, RWRITER, RREGDATE 
-		FROM YUN_REPLY 
-		WHERE BNO = #{bno} 
-		ORDER BY RREGDATE DESC -->
 		SELECT BNO, RNO, RGROUP, RDEPTH, LEVEL, RCONTENT, RWRITER, RREGDATE 
 		FROM YUN_REPLY 
 		WHERE BNO = #{bno}
@@ -37,26 +33,11 @@
 	<delete id="deleteReply" parameterType="web.board.model.ReplyVO">
 		DELETE FROM YUN_REPLY WHERE RNO = #{rno}
 	</delete>
-	
-	
+
 	<!-- 답글 등록 -->
 	<insert id="reWriteReply">
 		INSERT INTO YUN_REPLY (BNO, RNO, RCONTENT, RWRITER, RDEPTH, RGROUP) 
 				VALUES (#{bno}, YUN_REPLY_SEQ.NEXTVAL, #{rContent}, #{rWriter}, #{rDepth}, #{rno})	
 	</insert>
-	
-	<!-- 답글 조회 -->
-	<select id="reReplyList" resultType="web.board.model.ReplyVO" parameterType="web.board.model.ReplyVO">
-		SELECT BNO, RNO, RGROUP, RDEPTH, LEVEL, RCONTENT, RWRITER, RREGDATE 
-		FROM YUN_REPLY 
-		WHERE BNO = #{bno}
-		AND RDEPTH = 1
-		START WITH RGROUP IS null
-		CONNECT BY PRIOR RNO = RGROUP
-<!-- 		SELECT BNO, RNO, RGROUP, RDEPTH
-		FROM YUN_REPLY
-		WHERE BNO = #{bno}
-		AND RGROUP = #{rno} -->
-	</select>
-	
+
 </mapper>

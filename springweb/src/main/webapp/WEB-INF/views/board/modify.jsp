@@ -64,6 +64,12 @@
 				<input type="hidden" id="bno" name="bno" value='<c:out value="${pageInfo.bno }"/>'/>
 				<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum }"/>' />
 				<input type="hidden" name="amount" value='<c:out value="${cri.amount }"/>' />
+				<c:if test="${user_id != '' }">
+					<input type="hidden" name="user_id" value='<c:out value="${user_id }"/>' />
+				</c:if>
+				<c:if test="${user_id == '' }">
+					<input type="hidden" name="user_id" value='' />
+				</c:if>
 			</form>
 		</section>
 		

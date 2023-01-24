@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -27,10 +28,12 @@ import web.board.model.PageMakerDTO;
 import web.board.model.ReplyVO;
 import web.board.service.BoardService;
 import web.board.service.ReplyService;
+import web.board.util.FileUtils;
 
-@Controller
+@Controller // 이 클래스가 컨트롤러 역할을 한다고 스프링에 선언하는 역할
 @RequestMapping("/board/*")
 public class BoardController {
+	// 로그기록을 남기기 위해 Logger클래스인 logger변수 선언 
 	private static final Logger log = LoggerFactory.getLogger(BoardController.class);
 	
 	@Resource(name="boardService")
@@ -38,20 +41,8 @@ public class BoardController {
 	
 	@Resource(name="replyService")
 	private ReplyService replyService;
+
 	
-	
-	/* 게시판 목록 페이지 접속 */
-	/*@GetMapping("/list")
-	public void listBoardGET(Model model, HttpServletRequest request) {
-		System.out.println("/board/list - 게시판 리스트 진입");
-		try {
-			List<BoardVO> list = boardService.getList();
-			model.addAttribute("list", list);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 
-		//return "/board/list";
-	}*/
 	/* 게시판 목록 페이지 접속(페이징 적용) */
 	@GetMapping("/list")
 	public void boardListGET(BoardVO boardVo ,Model model, Criteria cri) {
@@ -93,7 +84,7 @@ public class BoardController {
 	
 	/* 상세조회 */
 	@GetMapping("/get")
-	public void boardGetPageGET(ReplyVO replyVo, int bno, Model model, Criteria cri) {
+	public void boardGetPageGET(String user_id, ReplyVO replyVo, int bno, Model model, Criteria cri) {
 		try {
 			model.addAttribute("pageInfo", boardService.getPage(bno));
 			model.addAttribute("cri", cri);
@@ -103,6 +94,8 @@ public class BoardController {
 			
 			List<ReplyVO> replyList = replyService.readReply(bno);
 			model.addAttribute("replyList", replyList);
+			
+			model.addAttribute("user_id", user_id);
 			
 //			List<ReplyVO> reReplyList = replyService.reReplyList(replyVo);
 //			model.addAttribute("reReplyList", reReplyList);
@@ -114,10 +107,11 @@ public class BoardController {
 	
 	/* 수정 페이지 이동 */
 	@GetMapping("/modify")
-	public void boardModifyGET(int bno, Model model, Criteria cri) {
+	public void boardModifyGET(String user_id, int bno, Model model, Criteria cri) {
 		try {
 			model.addAttribute("pageInfo", boardService.getPage(bno));
 			model.addAttribute("cri", cri);
+			model.addAttribute("user_id", user_id);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -173,7 +167,7 @@ public class BoardController {
 	/****************************************************************************************************************************/
 	/* 댓글 작성 */
 	@PostMapping("/writeReply")
-	public String writeReply(ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
+	public String writeReply(String user_id, ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
 		
 		try {
 			replyService.writeReply(replyVo);			
@@ -182,6 +176,7 @@ public class BoardController {
 		}
 
 		rttr.addAttribute("bno", replyVo.getBno());
+		rttr.addAttribute("user_id", user_id);
 		
 		return "redirect:/board/get";
 	}
@@ -218,7 +213,7 @@ public class BoardController {
 	
 	/* 댓글 삭제 : post */
 	@PostMapping("/replyDelete")
-	public String replyDelete(ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
+	public String replyDelete(String user_id, ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
 		try {
 			replyService.deleteReply(replyVo);
 		}catch(SQLException e) {
@@ -226,6 +221,7 @@ public class BoardController {
 		}
 		
 		rttr.addAttribute("bno", replyVo.getBno());
+		rttr.addAttribute("user_id", user_id);
 		
 		return "redirect:/board/get";
 	}
@@ -233,24 +229,27 @@ public class BoardController {
 	
 	
 	 /* 답변 등록창: GET */
-	 @GetMapping("/reReplyInsertView") 
-	 public String replyInsertView(ReplyVO replyVo, Model model) throws SQLException{
-		System.out.println("/replyInsertView - 답변 등록페이지 진입");
-
-		model.addAttribute("replyList", replyVo);
-
-		return "board/replyInsertView"; 
-	 }
+//	 @GetMapping("/reReplyInsertView") 
+//	 public String replyInsertView(ReplyVO replyVo, Model model) throws SQLException{
+//		System.out.println("/replyInsertView - 답변 등록페이지 진입");
+//
+//		model.addAttribute("replyList", replyVo);
+//
+//		return "board/replyInsertView"; 
+//	 }
 
 	 /* 답변 등록: POST */
 	 @PostMapping("/reReplyInsert")
-	 public String reReplyInsert(ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
+	 public String reReplyInsert(String user_id,ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
 		 
 		 replyService.reWriteReply(replyVo);
 		 
 		 rttr.addAttribute("bno", replyVo.getBno());
+		 rttr.addAttribute("user_id", user_id);
 		 
 		 return "redirect:/board/get";
 	 }
+	 
+
 	
 }

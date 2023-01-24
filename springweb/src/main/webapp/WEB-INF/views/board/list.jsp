@@ -15,56 +15,66 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 	<style>
-	  /* a{text-decoration : none;}
-	  table{
-	 		border-collapse: collapse;
-	 		width: 1000px;    
-	 		margin-top : 20px;
-	 		text-align: center;
-	  }
-	  td, th{
-	  		border : 1px solid black;
-	  		height: 50px;
-	  }
-	  th{font-size : 17px;}
-	  thead{font-weight: 700;}
-	  .table_wrap{margin : 50px 0 0 50px;}
-	  .bno_width{width: 12%;}
-	  .writer_width{width: 20%;}
-	  .regdate_width{width: 15%;}
-	  .updatedate_width{width: 15%;}
-	  .top_btn{
-	  		font-size: 20px;
-	    	padding: 6px 12px;
-	   	 	background-color: #fff;
-	    	border: 1px solid #ddd;
-	    	font-weight: 600;
-	  }
-	  
-	  .pageInfo{
-	    	list-style : none;
-	    	display: inline-block;
-	  		margin: 50px 0 0 100px;      
-	  }
-	  .pageInfo li{
-	      	float: left;
-	    	font-size: 20px;
-	    	margin-left: 18px;
-	    	padding: 7px;
-	    	font-weight: 500;
-	  }
-	  a:link {color:black; text-decoration: none;}
-	  a:visited {color:black; text-decoration: none;}
-	  a:hover {color:black; text-decoration: underline;}
-	  
-	  .active{background-color:#cdd5ec;} */
+	
+	
+		/* .login_area{
+			width: 25%;
+			height: 100%;
+			display: inline-block;	
+			text-align: center;		
+		} */
+		/* 로그인 성공 영역 */
+		./* login_success_area{
+		    height: 62%;
+		    width: 80%;
+		    border: 2px solid #7474ad;
+		    border-radius: 15px;
+		    margin: 5% auto;
+		    padding-top: 5%;
+		}
+		.login_success_area>span{
+		    display : block;
+		    text-align: left;
+		    margin-left: 10%;
+		}
+		.login_success_area>a{
+		    font-size: 12px;
+		    font-weight: 900;
+		    display: inline-block;
+		    margin-top: 5px;
+		    background: #e1e5e8;
+		    width: 82px;
+		    height: 22px;
+		    line-height: 22px;
+		    border-radius: 25px;
+		    color: #606267; 
+		    cursor: pointer;   
+		} */
 	</style>
 </head>
 <body>
+	
 	<div class="container">
+		<div class="login_area">
+				<!-- 로그인하지 않은 상태  -->
+				<c:if test="${member == null }">
+					<div class="login_button">
+						<a href="/member/login">로그인</a>
+						<span><a href="/member/join">회원가입</a></span>
+					</div>
+				</c:if>
+						
+				<!-- 로그인한 상태 -->
+				<c:if test="${member != null }">
+					<div class="login_success_area">
+						<span>반갑습니다 ${member.user_id}님♥</span>
+						<a id="logoutBtn" class='btn btn-link'>로그아웃</a>
+					</div>
+				</c:if>
+		</div>
 		<h1>게시판 목록</h1>
 		<hr/>
-		<a href='/board/insert' class="btn_primary">게시판 등록</a>
+		<a id="insertBtn" type="button" class="btn btn-primary btn-sm">게시판 등록</a>
 		
 		<section id="container">
 			<table class="table table-hover">
@@ -121,12 +131,20 @@
 		<form id="moveForm" method="get">
 			<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
 			<input type="hidden" name="amount" value="${pageMaker.cri.amount }">	
+			<c:if test="${member != null }">			
+				<input type="hidden" name="user_id" value="${member.user_id}">			
+			</c:if>
+			<c:if test="${member == null }">
+				<input type="hidden" name="user_id" value="">	
+			</c:if>
+		</form>
+		<form id="insertForm" method="get">
+			<input type="hidden" name="user_id" value="${member.user_id}">				
 		</form>
 		</section>
 		
 	</div>
-	
-	
+
 	
 	
 	
@@ -157,6 +175,7 @@
 		});
 		
 		var moveForm = $("#moveForm");
+		var insertForm = $("#insertForm");
 		
 		$(".move").on("click", function(e){
 			e.preventDefault();
@@ -165,11 +184,34 @@
 			moveForm.submit();
 		});
 		
+		$("#insertBtn").click(function(){
+			if(${member != null }){
+				insertForm.attr("action", "/board/insert");
+				insertForm.submit();
+			}else{
+				alert("게시글 등록은 로그인한 상태에서만 가능합니다.");
+				return false;
+			};
+			
+		});
+		
 		$("#pageInfo a").on("click", function(e){
 			e.preventDefault(); //a태그 동작 멈춤
 			moveForm.find("input[name='pageNum']").val($(this).attr("href")); //<form>태그 내부 pageNum과 관련된 <input>태그의 value속성값을 클릭한 <a>태그의 페이지 번호 찾아줘
 			moveForm.attr("action", "/board/list") //<form>태그 action 속성 추가 및 '/board/list'을 속성값으로 추가
 			moveForm.submit(); //<form>태그 서버 전송
+		});
+		
+		/* 로그아웃 버튼 클릭 */
+		$("#logoutBtn").click(function(){
+			$.ajax({
+				type: 'POST',
+				url: "/member/logout",
+				success: function(data){
+					alert("로그아웃 성공");
+					document.location.reload();
+				}
+			})
 		});
 
 	</script>

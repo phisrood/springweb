@@ -32,7 +32,10 @@
 					url  : '/board/replyUpdate',
 					success : function(result){
 						//팝업창 닫으면서 부모창 새로고침
-						opener.parent.location.reload(); 
+						opener.location.reload();
+						//document.location.reload();
+						alert("수정되었습니다."); 
+						
 						window.close();
 					}
 				})

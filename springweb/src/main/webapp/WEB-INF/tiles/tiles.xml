@@ -12,6 +12,10 @@
   <definition name="board/*" extends="super">
   	<put-attribute name="content" value="/WEB-INF/views/board/{1}.jsp" />
   </definition>
+
+  <definition name="member/*" extends="super">
+  	<put-attribute name="content" value="/WEB-INF/views/member/{1}.jsp" />
+  </definition>
   
   <definition name="/*" extends="super">
   	<put-attribute name="content" value="/WEB-INF/views/{1}.jsp" />
