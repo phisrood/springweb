@@ -10,6 +10,9 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/board/list">Home</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/board/uploadFile">첨부파일테스트</a>
+        </li>
         <!-- <li class="nav-item">
           <a class="nav-link" href="#">Link</a>
         </li>

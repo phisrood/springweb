@@ -1,34 +1,46 @@
 package web.board.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import net.coobird.thumbnailator.Thumbnailator;
+import web.board.model.AttachFileVO;
 import web.board.model.BoardVO;
 import web.board.model.Criteria;
 import web.board.model.PageMakerDTO;
 import web.board.model.ReplyVO;
 import web.board.service.BoardService;
 import web.board.service.ReplyService;
-import web.board.util.FileUtils;
+
 
 @Controller // 이 클래스가 컨트롤러 역할을 한다고 스프링에 선언하는 역할
 @RequestMapping("/board/*")
@@ -42,6 +54,146 @@ public class BoardController {
 	@Resource(name="replyService")
 	private ReplyService replyService;
 
+	
+	///////////////////////////////////////////////////////////////////////////////////
+	/* 테스트용_첨부파일 업로드*/
+	@GetMapping("/uploadFile")
+	public void uploadfileForm() {
+		System.out.println("uploadFile 진입");
+		log.info("upload form");
+		log.info("upload form");
+	}
+	
+	@PostMapping("/uploadFormAction")
+	public void uploadFormPost(MultipartFile[] uploadFile, Model model) {
+		
+		String uploadFolder = "C:\\yun\\file";
+		
+		for(MultipartFile multipartFile : uploadFile) {
+			System.out.println("--------------------------------");
+			System.out.println("Upload File Name: " + multipartFile.getOriginalFilename());
+			System.out.println("Upload File Size: " + multipartFile.getSize());
+			
+			File saveFile = new File(uploadFolder, multipartFile.getOriginalFilename());
+			try {
+				multipartFile.transferTo(saveFile);
+			}catch(Exception e) {
+				System.out.println(e.getMessage());
+			}//end catch
+		}//end for
+	}
+	
+	
+	/* 년/월/일 폴더 생성: 한 번에 폴더를 생성하거나 존재하는 폴더를 이용하는 방식  */
+	private String getFolder() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		String str = sdf.format(date);
+		
+		return str.replace("-", File.separator);
+	}
+	
+	/* 업로드된 파일이 이미지 종류의 파일인지 확인 */
+	private boolean checkImageType(File file) {
+		try {
+			String contentType = Files.probeContentType(file.toPath());
+			return contentType.startsWith("image");
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	
+	/**
+	 * 해당 경로가 있는지 검사 -> 폴더생성 및 폴더로 파일을 저장
+	 * : 폴더를 생성한 후 uploadPath 경로에 파일을 저장하게 되면 자동으로 폴더가 생성되면서 파일이 저장됨
+	 */
+	@PostMapping(value="/uploadFile", produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<List<AttachFileVO>> uploadAjaxPost(MultipartFile[] uploadFile) { 
+		
+		List<AttachFileVO> list = new ArrayList<AttachFileVO>();
+		String uploadFolder = "C:\\yun" ;
+		
+		String uploadFolderPath = getFolder();
+		//make folder ------------
+		File uploadPath = new File(uploadFolder, getFolder()); //getFolder(): 오늘 날짜의 경로를 문자열로 생성(생성된 경로는 폴더 경로로 수정된 뒤 반환)
+		System.out.println("upload path: " + uploadPath);
+		
+		if(uploadPath.exists() == false) {
+			uploadPath.mkdirs(); //mkdirs(): 필요한 상위 폴더까지 한 번에 생성
+		}
+		//make yyyy/MM/dd folder
+		
+		for(MultipartFile multipartFile : uploadFile) {
+			System.out.println("----------------------------------------");
+			System.out.println("Upload File Name: " + multipartFile.getOriginalFilename());
+			System.out.println("Upload File Size: " + multipartFile.getSize());
+			
+			AttachFileVO attachVo = new AttachFileVO();
+			
+			String uploadFileName = multipartFile.getOriginalFilename();
+			
+			//IE has file path : IE의 경우 전체 파일 경로가 전송되므로, 마지막 '\'를 기준으로 잘라낸 문자열이 실제 파일 이름이 된다.
+			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
+			System.out.println("only file name: "+ uploadFileName);
+
+			attachVo.setFileName(uploadFileName);
+			
+			//UUID: 중복방지
+			UUID uuid = UUID.randomUUID(); //randomUUID(): 임의의 값 생성 
+			uploadFileName = uuid.toString() + "_" + uploadFileName; //생성된 값은 원래의 파일이름과 구분할 수 있도록 중간에 '_' 추가 
+			// => 그래서 첨부파일을 업로드하면 UUID가 생성된 파일이 생기므로, 원본 이름과 같더라도 다른 이름의 파일로 생성됨
+			
+			try {
+				File saveFile = new File(uploadFolder, uploadFileName);
+				multipartFile.transferTo(saveFile);
+				
+				attachVo.setUuid(uuid.toString());
+				attachVo.setUploadPath(uploadFolderPath);
+				
+				//특정한 파일이 이미지타입인지 검사
+				//만약 이미지 타입이면 섬네일 생성
+				if(checkImageType(saveFile)) { 
+					attachVo.setImage(true);
+					
+					FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
+					Thumbnailator.createThumbnail(multipartFile.getInputStream(), thumbnail, 100, 100);
+					thumbnail.close();
+				}
+				
+				//add to List
+				list.add(attachVo);
+				
+			}catch(Exception e) {
+				System.out.println(e.getMessage());
+			}//end catch
+		}//end for
+		return new ResponseEntity<List<AttachFileVO>>(list, HttpStatus.OK);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/* 게시판 목록 페이지 접속(페이징 적용) */
 	@GetMapping("/list")

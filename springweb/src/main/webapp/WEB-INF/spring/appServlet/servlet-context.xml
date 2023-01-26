@@ -49,6 +49,11 @@
 	
 	<context:component-scan base-package="web.board.*" />
 	
+	<!-- 첨부파일을 처리하는 빈 설정: START -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"></beans:bean>
+	<!-- 첨부파일을 처리하는 빈 설정: END -->
+	
+	
 	<aop:config>
 		<aop:pointcut id="txMethod" expression="execution(* *..*Impl.*(..)))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="txMethod"  />
