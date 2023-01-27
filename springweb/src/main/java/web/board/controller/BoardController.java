@@ -18,11 +18,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -160,7 +163,7 @@ public class BoardController {
 					attachVo.setImage(true);
 					
 					FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
-					Thumbnailator.createThumbnail(multipartFile.getInputStream(), thumbnail, 100, 100);
+					Thumbnailator.createThumbnail(multipartFile.getInputStream(), thumbnail, 500, 500);
 					thumbnail.close();
 				}
 				
@@ -175,11 +178,46 @@ public class BoardController {
 	}
 	
 	
+	/* 섬네일 데이터 전송하기 */
+	@GetMapping("/display")
+	@ResponseBody // <-스프링에서 비동기처리하는경우 body에 데이터를 담아서 보내야하는데 그때 사용(요청본분:requestBody,응답본문:responseBody를 담아서 보냄)
+	public ResponseEntity<byte[]> getFile(String fileName){ //ResponseEntity: httpentity를 상속받는, 결과 데이터와 HTTP상태코드를 직접 제어할 수있는 클래스
+		System.out.println("fileName: "+ fileName);
+		File file = new File("c:\\yun\\" + fileName);
+		System.out.println("file: "+ file);
+		
+		ResponseEntity<byte[]> result = null;
+		
+		try {
+			HttpHeaders header = new HttpHeaders();
+			
+			header.add("Content-Type", Files.probeContentType(file.toPath()));
+			result = new ResponseEntity<byte[]>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 	
-	
-	
-	
+	/* 첨부파일 다운로드 */
+	/**
+	 * MIME 란? 
+	 * Multipurpose Internet Mail Extensions의 약자
+	 * 파일 변환
+	 */
+	@GetMapping(value="/download", produces=MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<Resource> downloadFile(String fileName){
+		System.out.println("download file: "+ fileName);
+		
+//		Resource resource = new FileSystemResource("c:\\yun\\"+ fileName);
+		org.springframework.core.io.Resource resource = new FileSystemResource("c:\\yun\\"+ fileName);
+		
+		System.out.println("resouce: " + resource);
+		
+		return null;
+	}
 	
 	
 	

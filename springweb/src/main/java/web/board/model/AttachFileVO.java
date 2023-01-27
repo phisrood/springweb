@@ -10,4 +10,6 @@ public class AttachFileVO {
 	private String uuid; //UUID값
 	private boolean image; //이미지인지 아닌지 여부
 	
+	private int bno;
+	
 }

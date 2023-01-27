@@ -1,11 +1,12 @@
 package web.board.model;
 
 import java.util.Date;
+import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 
+@Data
 public class BoardVO {
 
     /* 게시판 제목 */
@@ -25,7 +26,7 @@ public class BoardVO {
     /* 댓글 개수 */
     private int repCount;
     
-    
+    private List<AttachFileVO> attachList;
 	
 
 	@Override

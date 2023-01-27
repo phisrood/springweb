@@ -25,6 +25,9 @@
 	.uploadResult ul li img{
 		width: 20px;
 	}
+	.uploadResult ul li #img{
+		width: 100%;
+	}
 
 </style>
 
@@ -58,13 +61,20 @@
 		
 		//첨부파일 이름을 목록으로 처리
 		var uploadResult = $(".uploadResult ul");
+		
 		function showUploadedFile(uploadResultArr){
+
 			var str = "";
+			
 			$(uploadResultArr).each(function(i, obj){
+				console.log('obj==========: ',obj);
+				
 				if(!obj.image){
 					str += "<li><img src='/resources/img/attach.png'> "+ obj.fileName +"</li>";
 				}else{
-					str += "<li>" + obj.fileName + "</li>";
+					//str += "<li>" + obj.fileName + "</li>";
+					var fileCallPath = encodeURIComponent(obj.uploadPath+ "/s_" +obj.uuid+ "_" +obj.fileName);
+					str += "<li><img id='img' src='/board/display?fileName="+fileCallPath+"'></li>";
 				}
 				
 			});

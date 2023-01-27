@@ -73,7 +73,6 @@
 					<label for="uploadFile" class="col-sm-2 control-label">업로드</label>
 					<input class="form-control" type="file" name="uploadFile" id="uploadFile"/>
 					<div class="select_img"><img src=""/></div>
-					<%=request.getRealPath("/") %>
 				</div>
 			</form>
 			<div class="form-group">
