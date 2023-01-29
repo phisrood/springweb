@@ -53,7 +53,7 @@
 	</style>
 </head>
 <body>
-	
+
 	<div class="container">
 		<div class="login_area">
 				<!-- 로그인하지 않은 상태  -->
@@ -67,7 +67,7 @@
 				<!-- 로그인한 상태 -->
 				<c:if test="${member != null }">
 					<div class="login_success_area">
-						<span>반갑습니다 ${member.user_id}님♥</span>
+						<span>반갑습니다 ${member.user_nm}님♥</span>
 						<a id="logoutBtn" class='btn btn-link'>로그아웃</a>
 					</div>
 				</c:if>
@@ -87,25 +87,31 @@
 						<th class="updatedate_width">수정일</th>
 					</tr>
 				</thead>
-			<c:forEach items="${list}" var="list">
-				<tr>
-					<td><c:out value="${list.rownum}"/></td>
-					<td>
-						<a class="move" href='<c:out value="${list.bno}"/>'>
-							<c:out value="${list.title}"/>
-							<c:if test="${list.repCount ne 0}">
-								<small>
-									<b style="color: #B40431;">[&nbsp;<c:out value="${list.repCount}"/>&nbsp;]</b>
-								</small>
-							</c:if>
-						</a>					
-					</td>
-					<td><c:out value="${list.writer}"/></td>				
-					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${list.regdate}"/></td>
-					<td><fmt:formatDate pattern="yyyy-MM-dd" value="${list.updateDate}"/></td>				
-				</tr>
-			</c:forEach>
-		</table>
+				<c:if test="${listTotal ne 0}">
+						<c:forEach items="${list}" var="list">
+							<tr>
+								<td><c:out value="${list.rownum}"/></td>
+								<td>
+									<a class="move" href='<c:out value="${list.bno}"/>'>
+										<c:out value="${list.title}"/>
+										<c:if test="${list.repCount ne 0}">
+											<small>
+												<b style="color: #B40431;">[&nbsp;<c:out value="${list.repCount}"/>&nbsp;]</b>
+											</small>
+										</c:if>
+									</a>					
+								</td>
+								<td><c:out value="${list.writer}"/></td>				
+								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${list.regdate}"/></td>
+								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${list.updateDate}"/></td>				
+							</tr>
+						</c:forEach>
+				</c:if>
+				<c:if test="${listTotal == 0 }">
+					<tr><td colspan="5" style="text-align: center;">등록된 글이 없습니다.</td></tr>
+				</c:if>
+				
+			</table>
 		
 		<div class="col-md-offset-3">
 			<div class="pageInfo_area">
@@ -133,6 +139,7 @@
 			<input type="hidden" name="amount" value="${pageMaker.cri.amount }">	
 			<c:if test="${member != null }">			
 				<input type="hidden" name="user_id" value="${member.user_id}">			
+				<input type="hidden" name="user_nm" value="${member.user_nm}">			
 			</c:if>
 			<c:if test="${member == null }">
 				<input type="hidden" name="user_id" value="">	
@@ -188,6 +195,8 @@
 			if(${member != null }){
 				insertForm.attr("action", "/board/insert");
 				insertForm.submit();
+				
+				
 			}else{
 				alert("게시글 등록은 로그인한 상태에서만 가능합니다.");
 				return false;

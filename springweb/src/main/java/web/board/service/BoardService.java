@@ -26,9 +26,12 @@ public interface BoardService {
 	public Map<String, Object> selectFileInfo(Map<String, Object> map) throws SQLException;
 	
 	/* 게시판 수정 */
-	public void modify(BoardVO boardVo, String[] files, String[] fileNames, MultipartHttpServletRequest mpRequest) throws SQLException;
+	public void modify(BoardVO boardVo, String[] files, String[] fileNames, MultipartHttpServletRequest mpRequest) throws SQLException, Exception;
 	/* 게시판 삭제 */
 	public int delete(int bno) throws SQLException;
+	
+	/* 첨부파일이미지 경로*/
+	public List<BoardVO> selectFilePath(int fILE_NO) throws SQLException;
 	
 
 }

@@ -3,6 +3,8 @@ package web.board.model;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 
@@ -15,9 +17,13 @@ public class BoardVO {
     private String content;
     /* 게시판 작가 */
     private String writer;
+    
     /* 등록 날짜 */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date regdate;
+    
     /* 수정 날짜 */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateDate;
     /* 게시판 번호 */
     private int bno;
@@ -26,13 +32,17 @@ public class BoardVO {
     /* 댓글 개수 */
     private int repCount;
     
-    private List<AttachFileVO> attachList;
+    private String ATTACH_PATH;
+    private int FILE_NO;
+
+	private List<AttachFileVO> attachList;
 	
 
 	@Override
 	public String toString() {
 		return "BoardVO [title=" + title + ", content=" + content + ", writer=" + writer + ", regdate=" + regdate
-				+ ", updateDate=" + updateDate + ", bno=" + bno + ", rownum=" + rownum + ", repCount=" + repCount + "]";
+				+ ", updateDate=" + updateDate + ", bno=" + bno + ", rownum=" + rownum + ", repCount=" + repCount
+				+ ", ATTACH_PATH=" + ATTACH_PATH + ", FILE_NO=" + FILE_NO + "]";
 	}
 	
 	public String getTitle() {
@@ -109,4 +119,21 @@ public class BoardVO {
 	public void setRepCount(int repCount) {
 		this.repCount = repCount;
 	}
+	
+    public int getFILE_NO() {
+		return FILE_NO;
+	}
+
+	public void setFILE_NO(int fILE_NO) {
+		FILE_NO = fILE_NO;
+	}
+
+	public String getATTACH_PATH() {
+		return ATTACH_PATH;
+	}
+
+	public void setATTACH_PATH(String aTTACH_PATH) {
+		ATTACH_PATH = aTTACH_PATH;
+	}
+	
 }

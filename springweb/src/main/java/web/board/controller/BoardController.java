@@ -1,10 +1,14 @@
 package web.board.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.file.Files;
+import java.nio.file.Path;
+
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,6 +87,7 @@ public class BoardController {
 			}catch(Exception e) {
 				System.out.println(e.getMessage());
 			}//end catch
+			
 		}//end for
 	}
 	
@@ -240,8 +245,9 @@ public class BoardController {
 		try {
 			List<BoardVO> list = boardService.getListPaging(cri);
 			model.addAttribute("list", list);
-			
+
 			int total = boardService.getTotal();
+			model.addAttribute("listTotal", total);
 			
 			PageMakerDTO pageMaker = new PageMakerDTO(cri, total);
 			model.addAttribute("pageMaker", pageMaker);
@@ -274,22 +280,20 @@ public class BoardController {
 	
 	/* 상세조회 */
 	@GetMapping("/get")
-	public void boardGetPageGET(String user_id, ReplyVO replyVo, int bno, Model model, Criteria cri) {
+	public void boardGetPageGET(String user_id, String user_nm, ReplyVO replyVo, int bno, Model model, Criteria cri) {
 		try {
 			model.addAttribute("pageInfo", boardService.getPage(bno));
 			model.addAttribute("cri", cri);
 			
 			List<Map<String, Object>> fileList = boardService.selectFileList(bno);
 			model.addAttribute("file", fileList);
+			model.addAttribute("fileCnt", fileList.size());
 			
 			List<ReplyVO> replyList = replyService.readReply(bno);
 			model.addAttribute("replyList", replyList);
 			
 			model.addAttribute("user_id", user_id);
-			
-//			List<ReplyVO> reReplyList = replyService.reReplyList(replyVo);
-//			model.addAttribute("reReplyList", reReplyList);
-			
+			model.addAttribute("user_nm", user_nm);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -297,11 +301,17 @@ public class BoardController {
 	
 	/* 수정 페이지 이동 */
 	@GetMapping("/modify")
-	public void boardModifyGET(String user_id, int bno, Model model, Criteria cri) {
+	public void boardModifyGET(int fileCnt, String user_id, String user_nm, int bno, Model model, Criteria cri) {
 		try {
 			model.addAttribute("pageInfo", boardService.getPage(bno));
 			model.addAttribute("cri", cri);
 			model.addAttribute("user_id", user_id);
+			model.addAttribute("user_nm", user_nm);
+			model.addAttribute("fileCnt", fileCnt);
+			
+			List<Map<String, Object>> fileList = boardService.selectFileList(bno);
+			model.addAttribute("file", fileList);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -309,14 +319,19 @@ public class BoardController {
 	
 	/* 수정 */
 	@PostMapping("/modify")
-	public String boardModifyPOST(BoardVO boardVo, RedirectAttributes rttr) {
+	public String boardModifyPOST(BoardVO boardVo, RedirectAttributes rttr, 
+			                     @RequestParam(value="fileNoDel[]") String[] files,
+			                     @RequestParam(value="fileNameDel[]") String[] fileNames,
+			                     MultipartHttpServletRequest mpRequest) {
 		System.out.println("/board/modify - 수정테스트");
 		try {
-			boardService.modify(boardVo, null, null, null);	
+			boardService.modify(boardVo, files, fileNames, mpRequest);	
 			rttr.addFlashAttribute("result", "modify success");
+			
 		}catch(SQLException e) {
 			e.printStackTrace();
-			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		return "redirect:/board/list";
@@ -354,10 +369,15 @@ public class BoardController {
 		response.getOutputStream().close();
 	}
 	
+	/* 파일 수정*/
+	
+	
+	
+	
 	/****************************************************************************************************************************/
 	/* 댓글 작성 */
 	@PostMapping("/writeReply")
-	public String writeReply(String user_id, ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
+	public String writeReply(String user_id, String user_nm, ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
 		
 		try {
 			replyService.writeReply(replyVo);			
@@ -367,6 +387,7 @@ public class BoardController {
 
 		rttr.addAttribute("bno", replyVo.getBno());
 		rttr.addAttribute("user_id", user_id);
+		rttr.addAttribute("user_nm", user_nm);
 		
 		return "redirect:/board/get";
 	}
@@ -403,7 +424,7 @@ public class BoardController {
 	
 	/* 댓글 삭제 : post */
 	@PostMapping("/replyDelete")
-	public String replyDelete(String user_id, ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
+	public String replyDelete(String user_id, String user_nm, ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
 		try {
 			replyService.deleteReply(replyVo);
 		}catch(SQLException e) {
@@ -412,33 +433,46 @@ public class BoardController {
 		
 		rttr.addAttribute("bno", replyVo.getBno());
 		rttr.addAttribute("user_id", user_id);
+		rttr.addAttribute("user_nm", user_nm);
 		
 		return "redirect:/board/get";
 	}
 
 	
-	
-	 /* 답변 등록창: GET */
-//	 @GetMapping("/reReplyInsertView") 
-//	 public String replyInsertView(ReplyVO replyVo, Model model) throws SQLException{
-//		System.out.println("/replyInsertView - 답변 등록페이지 진입");
-//
-//		model.addAttribute("replyList", replyVo);
-//
-//		return "board/replyInsertView"; 
-//	 }
 
 	 /* 답변 등록: POST */
 	 @PostMapping("/reReplyInsert")
-	 public String reReplyInsert(String user_id,ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
+	 public String reReplyInsert(String user_id, String user_nm, ReplyVO replyVo, RedirectAttributes rttr) throws SQLException{
 		 
 		 replyService.reWriteReply(replyVo);
 		 
 		 rttr.addAttribute("bno", replyVo.getBno());
 		 rttr.addAttribute("user_id", user_id);
+		 rttr.addAttribute("user_nm", user_nm);
 		 
 		 return "redirect:/board/get";
 	 }
+	 
+	 
+	@GetMapping("/getImage")
+	@ResponseBody
+	public byte[] getImage(int FILE_NO) throws SQLException {
+		List<BoardVO> fileList = boardService.selectFilePath(FILE_NO);
+		String path = fileList.get(0).getATTACH_PATH();
+
+		byte[] data = new byte[0];
+		String inputFile = path;
+
+		try {
+		    InputStream inputStream = new FileInputStream(inputFile);
+		    long fileSize = new File(inputFile).length();
+		    data = new byte[(int) fileSize];
+		    inputStream.read(data);
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+		return data;
+	}
 	 
 
 	

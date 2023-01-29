@@ -23,14 +23,11 @@
 
 </head>
 <body>
+아이디: ${user_id }
+이름 : ${user_nm }
+
 	<div class="container">
 		<h1>상세조회</h1>
-		<c:if test="${user_id != ''}">
-			${user_id }
-		</c:if>
-		<c:if test="${user_id == ''}">
-			없음
-		</c:if>
 		
 		<section id="container">
 			<div class="form-group">
@@ -58,18 +55,29 @@
 				<input class="form-control" name="updateDate" readonly="readonly" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.updateDate}"/>' />
 			</div>
 			<div class="form-group">
-				<label>첨부파일</label>
-				<c:forEach var="file" items="${file }">
-					<a href="#" onclick="fn_fileDown('${file.FILE_NO}'); return false;">${file.ORG_FILE_NAME}</a>(${file.FILE_SIZE}kb)<br>
-				</c:forEach>
+				<label>첨부파일</label><span style='color: crimson;'>[${fileCnt}]</span>
+					<div style='padding:15px 0px 5px 20px;'>
+						<c:forEach var="file" items="${file }">
+							<c:url var="imageUrl" value="/board/getImage">
+								<c:param name="FILE_NO" value="${file.FILE_NO }" />
+							</c:url>
+							<ul>
+								<li>
+									<img style='width: 20px;' src='/resources/img/attach.png' >
+									<a href="#" onclick="fn_fileDown('${file.FILE_NO}'); return false;">${file.ORG_FILE_NAME}</a>(${file.FILE_SIZE}kb)<br/>
+									<img alt="" src="${imageUrl}" width="500px;">
+								</li>
+							</ul>
+						</c:forEach>
+					</div>
 			</div>
+			
 			<div class="btn_wrap">
 				<a class="btn btn-secondary" id="list_btn">목록</a> 
 				<c:if test="${user_id != ''}">		
-					<c:if test="${user_id eq pageInfo.writer}">
+					<c:if test="${user_nm eq pageInfo.writer}">
 						<a class="btn btn-warning" id="modify_btn">수정하기</a>
 					</c:if>		
-					
 				</c:if>
 			</div>
 
@@ -83,9 +91,11 @@
 				<input type="hidden" id="rDepth" name="rDepth" value='0' />
 				<c:if test="${user_id != '' }">			
 					<input type="hidden" name="user_id" value="${user_id}">			
+					<input type="hidden" name="user_nm" value="${user_nm}">			
 				</c:if>
 				<c:if test="${user_id == null }">
 					<input type="hidden" name="user_id" value="">	
+					<input type="hidden" name="user_nm" value="">	
 				</c:if>
 
 				<!-- 댓글 작성 -->
@@ -93,7 +103,7 @@
 					<div class="form-group">
 						<label for="rWriter" class="col-sm-2 control-label">댓글 작성자</label>
 						<div class="col-sm-2">
-							<input class="form-control" type="text" id="rWriter" name="rWriter" value="${user_id }" readonly/>
+							<input class="form-control" type="text" id="rWriter" name="rWriter" value="${user_nm }" readonly/>
 						</div>
 					</div>
 					<div class="form-group">
@@ -130,7 +140,8 @@
 								<p>${replyList.rContent}</p>
 							</div>
 							<div style="margin-left: 71px;">
-								<c:if test="${user_id eq replyList.rWriter }">								
+							
+								<c:if test="${user_nm eq replyList.rWriter }">								
 									<button type="button" class="reReplyUpdateBtn btn btn-warning" data-rno="${replyList.rno }" >답글 수정</button>
 									<button type="button" class="reReplyDeleteBtn btn btn-danger"  data-rno="${replyList.rno }" >답글 삭제</button>
 								</c:if>
@@ -146,11 +157,11 @@
 									<p>${replyList.rContent}</p>
 								</div>
 								<div>
-									<c:if test="${user_id eq replyList.rWriter }">
+									<c:if test="${user_nm eq replyList.rWriter }">
 										<button type="button" class="replyUpdateBtn btn btn-warning" data-rno="${replyList.rno }">수정</button>
 										<button type="button" class="replyDeleteBtn btn btn-danger"  data-rno="${replyList.rno }">삭제</button>
 									</c:if>
-									<c:if test="${user_id != '' }">								
+									<c:if test="${user_nm != '' }">								
 										<button type="button" class="replyInsertBtn btn btn-primary" data-no="${status.count}" data-rno="${replyList.rno}">답글</button>
 									</c:if>
 								</div>
@@ -163,7 +174,7 @@
 								<form name='reReplyForm' action='/board/reReplyInsert' method='post'>
 									<div>
 										<label for='rWriter'>답글 작성자</label> 
-										<input style='width: 100px; margin-left: 10px;' type='text' name='rWriter' id='reWriter${replyList.rno}' value='${user_id }' readonly/>
+										<input style='width: 100px; margin-left: 10px;' type='text' name='rWriter' id='reWriter${replyList.rno}' value='${user_nm }' readonly/>
 									</div>
 									<div>
 										<label style='margin-left: 12px;' for='rContent'>답글 내용</label>
@@ -186,12 +197,15 @@
 				<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>' /> 
 				<input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>' />
 				<input type="hidden" id="FILE_NO" name="FILE_NO" value="" />
+				<input type="hidden" name="fileCnt" value="${fileCnt}" />
 			
 				<c:if test="${user_id != '' }">			
 					<input type="hidden" name="user_id" value="${user_id}">			
+					<input type="hidden" name="user_nm" value="${user_nm}">			
 				</c:if>
 				<c:if test="${user_id == null }">
 					<input type="hidden" name="user_id" value="">	
+					<input type="hidden" name="user_nm" value="">	
 				</c:if>
 				
 			</form>
@@ -212,6 +226,7 @@
 	/* 목록버튼 클릭 */
 	$("#list_btn").on("click", function(e){
 		form.find("#bno").remove();
+		form.find("#FILE_NO").remove();
 		form.attr("action", "/board/list");
 		form.submit();
 
@@ -279,6 +294,7 @@
 		var targetRwriter = "#reWriter" + rno;
 		var targetReContent = "#reContent" + rno;
 		var user_id = '<c:out value="${user_id}" />'
+		var user_nm = '<c:out value="${user_nm}" />'
 
 		console.log(user_id)
 		
@@ -292,6 +308,7 @@
 		
 		var data = {
 			user_id : user_id,
+			user_nm : user_nm,
 			rWriter  : rWriter,
 			rContent : rContent,
 			rno : rno,

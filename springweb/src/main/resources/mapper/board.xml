@@ -56,14 +56,22 @@
 
 	<!-- 첨부파일 업로드 -->
 	<insert id="insertFile" parameterType="hashMap">
-		INSERT INTO YUN_FILE(FILE_NO, BNO, ORG_FILE_NAME, STORED_FILE_NAME, FILE_SIZE)
-			VALUES(SEQ_YUN_FILE_NO.NEXTVAL, #{BNO}, #{ORG_FILE_NAME}, #{STORED_FILE_NAME}, #{FILE_SIZE} )
+		INSERT INTO YUN_FILE(FILE_NO, BNO, ORG_FILE_NAME, STORED_FILE_NAME, FILE_SIZE, ATTACH_PATH)
+			VALUES(SEQ_YUN_FILE_NO.NEXTVAL, #{BNO}, #{ORG_FILE_NAME}, #{STORED_FILE_NAME}, #{FILE_SIZE}, #{ATTACH_PATH} )
 	</insert>
 	<!-- 첨부파일 조회 -->
 	<select id="selectFileList" parameterType="int" resultType="hashMap">
-		SELECT FILE_NO, ORG_FILE_NAME, ROUND(FILE_SIZE/1024,1) AS FILE_SIZE
+		SELECT FILE_NO, ORG_FILE_NAME, ROUND(FILE_SIZE/1024,1) AS FILE_SIZE, ATTACH_PATH
         FROM YUN_FILE
         WHERE BNO = #{BNO}
+        AND DEL_GB = 'N'
+        ORDER BY FILE_NO ASC
+	</select>
+	<!-- 첨부파일 경로 조회 -->
+	<select id="selectFilePath" parameterType="int" resultType="web.board.model.BoardVO">
+		SELECT FILE_NO, ORG_FILE_NAME, ROUND(FILE_SIZE/1024,1) AS FILE_SIZE, ATTACH_PATH
+        FROM YUN_FILE
+        WHERE FILE_NO = #{FILE_NO}
         AND DEL_GB = 'N'
         ORDER BY FILE_NO ASC
 	</select>
@@ -73,6 +81,7 @@
 		FROM YUN_FILE 
 		WHERE FILE_NO = #{FILE_NO}
 	</select>
+	<!-- 첨부파일 수정 -->
 	<update id="updateFile" parameterType="hashMap">
 		UPDATE YUN_FILE 
 		SET DEL_GB = 'Y'

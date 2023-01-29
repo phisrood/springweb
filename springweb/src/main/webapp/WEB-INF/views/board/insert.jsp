@@ -22,7 +22,7 @@
 			/* 등록버튼 체크*/
 			$("#insert_btn").on("click", function(e){
 				var form = $("#infoForm") ; 
-				
+
 				var title      = $('#title').val();
 				var content    = $('#content').val();
 				var writer     = $('#writer').val(); 
@@ -31,11 +31,9 @@
 					alert('입력해줘');
 					return false;
 				}
-				
 				form.submit();
-		
 			}); 
-			
+
 			/* 목록버튼 클릭 */
 			$("#list_btn").on("click", function(e){
 				location.href="/board/list" ;
@@ -46,12 +44,29 @@
 				   if(this.files && this.files[0]) {
 				    var reader = new FileReader;
 				    reader.onload = function(data) {
-				     $(".select_img img").attr("src", data.target.result).width(500);        
+				     	$(".select_img img").attr("src", data.target.result).width(500);        
 				    }
 				    reader.readAsDataURL(this.files[0]);
 				   }
 			});
+
+			fn_addFile();
 		});
+		
+		function fn_addFile(){
+			var fileIndex = 1;
+			$(".fileAdd_btn").on("click", function(){
+				$("#fileIndex").append("<div><input class='form-control' type='file' style='float:left;' name='file_"+(fileIndex++)+"'>"+"</button>"+"<button type='button' class='btn' style='float:right;' id='fileDelBtn'>"+"삭제"+"</button></div>");
+			});
+			$(document).on("click","#fileDelBtn", function(){
+				$(this).parent().remove();
+				
+			});
+		}
+		
+		
+		
+		
 	</script>
 	<div class="container">
 		<h1>게시판 등록</h1>
@@ -67,18 +82,22 @@
 				</div>
 				<div class="form-group">
 					<label for="writer" class="col-sm-2 control-label">작성자</label>
-					<input class="form-control" name="writer" id="writer" value="${member.user_id }" readonly="readonly"/>
+					<input class="form-control" name="writer" id="writer" value="${member.user_nm }" readonly="readonly"/>
 				</div>
 				<div class="form-group">
 					<label for="uploadFile" class="col-sm-2 control-label">업로드</label>
-					<input class="form-control" type="file" name="uploadFile" id="uploadFile"/>
+					<div>
+						<div id="fileIndex"></div>
+					</div>
 					<div class="select_img"><img src=""/></div>
 				</div>
+				
 			</form>
 			<div class="form-group">
 				<div class="btn_wrap">
 					<button class="btn btn-secondary" id="list_btn">목록</button>
 					<button class="btn btn-primary" id="insert_btn">등록</button>
+					<button class="btn fileAdd_btn" type="button">파일추가</button>	
 				</div>
 			</div>
 		</section>

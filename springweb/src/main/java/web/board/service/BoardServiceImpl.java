@@ -47,6 +47,7 @@ public class BoardServiceImpl implements BoardService{
 		
 		List<Map<String,Object>> list = fileUtils.parseInsertFileInfo(boardVo, mpRequest); 
 		int size = list.size();
+
 		for(int i=0; i<size; i++){ 
 			commonDao.insertFile(list.get(i)); 
 		}
@@ -72,16 +73,33 @@ public class BoardServiceImpl implements BoardService{
 	
 	/* 수정 */
 	@Override
-	public void modify(BoardVO boardVo, String[] files, String[] fileNames, MultipartHttpServletRequest mpRequest) throws SQLException {
+	public void modify(BoardVO boardVo, String[] files, String[] fileNames, MultipartHttpServletRequest mpRequest) throws Exception {
 		commonDao.update("modify", boardVo);
 		
-//		List<Map<String, Object>> list = fileUtils.parse
+		List<Map<String, Object>> list = fileUtils.parseUpdateFileInfo(boardVo, files, fileNames, mpRequest);
+		Map<String, Object> tempMap = null;
+		int size = list.size();
+		for(int i = 0; i<size; i++) {
+			tempMap = list.get(i);
+			if(tempMap.get("IS_NEW").equals("Y")) {
+				commonDao.insertFile(tempMap);
+			}else {
+				commonDao.updateFile(tempMap);
+			}
+		}
+		
 	}
 
 	/* 삭제*/
 	@Override
 	public int delete(int bno) throws SQLException {
 		return commonDao.delete("delete", bno);
+	}
+	
+	/* 첨부파일  이미지경로 */
+	@Override
+	public List<BoardVO> selectFilePath(int fILE_NO) throws SQLException{
+		return (List<BoardVO>) commonDao.selectList("selectFilePath", fILE_NO);
 	}
 	
 
