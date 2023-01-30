@@ -113,12 +113,12 @@
 			<div class="login_wrap"> 
 				<div class="id_wrap">
 					<div class="id_input_box">
-						<input class="id_input" name="user_id" placeholder="아이디">
+						<input class="id_input" name="user_id" id="user_id" placeholder="아이디">
 					</div>
 				</div>
 				<div class="pw_wrap">
 					<div class="pw_input_box">
-						<input type="password" class="pw_iput" name="user_pw" placeholder="비밀번호">
+						<input type="password" class="pw_iput" name="user_pw" id="user_pw" placeholder="비밀번호">
 					</div>
 				</div>
 				
@@ -141,12 +141,18 @@
 <script type="text/javascript">
 	/* 로그인 버튼 클릭 메서드 */
 	$("#loginBtn").click(function(){
-
 	    /* 로그인 메서드 서버 요청 */
         $("#login_form").attr("action", "/member/login");
         $("#login_form").submit();
-	    
 	});
+	
+	$("#user_pw").keydown(function(keyNum){
+		if(keyNum.keyCode == 13){ 
+			/* 로그인 메서드 서버 요청 */
+	        $("#login_form").attr("action", "/member/login");
+	        $("#login_form").submit();
+		}
+	})
 
 
 </script>

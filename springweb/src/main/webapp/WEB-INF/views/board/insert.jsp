@@ -56,12 +56,20 @@
 		function fn_addFile(){
 			var fileIndex = 1;
 			$(".fileAdd_btn").on("click", function(){
-				$("#fileIndex").append("<div><input class='form-control' type='file' style='float:left;' name='file_"+(fileIndex++)+"'>"+"</button>"+"<button type='button' class='btn' style='float:right;' id='fileDelBtn'>"+"삭제"+"</button></div>");
+				var fileHtml = "";
+				
+				fileHtml += "<div style='display:flex; margin:7px 0px'>";
+				fileHtml += "	<input class='form-control' type='file' style='width:auto; margin-right:3px;' name='file_"+(fileIndex++)+"'>";
+				fileHtml += "	<button type='button' class='btn btn-outline-secondary' id='fileDelBtn'>삭제</button>";		
+				fileHtml += "</div>";
+				
+				$("#fileIndex").append(fileHtml);
 			});
+			
 			$(document).on("click","#fileDelBtn", function(){
 				$(this).parent().remove();
-				
 			});
+			
 		}
 		
 		
@@ -84,12 +92,12 @@
 					<label for="writer" class="col-sm-2 control-label">작성자</label>
 					<input class="form-control" name="writer" id="writer" value="${member.user_nm }" readonly="readonly"/>
 				</div>
-				<div class="form-group">
-					<label for="uploadFile" class="col-sm-2 control-label">업로드</label>
-					<div>
+				<div class="form-group" style="padding-top:14px;">
+					<!-- <label for="uploadFile" class="col-sm-2 control-label">업로드</label> -->
+					<div >
 						<div id="fileIndex"></div>
 					</div>
-					<div class="select_img"><img src=""/></div>
+<!-- 					<div class="select_img"><img src=""/></div> -->
 				</div>
 				
 			</form>
@@ -97,7 +105,7 @@
 				<div class="btn_wrap">
 					<button class="btn btn-secondary" id="list_btn">목록</button>
 					<button class="btn btn-primary" id="insert_btn">등록</button>
-					<button class="btn fileAdd_btn" type="button">파일추가</button>	
+					<button class="btn btn-success  fileAdd_btn" type="button" >파일추가</button>	
 				</div>
 			</div>
 		</section>

@@ -230,14 +230,6 @@ public class BoardController {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	/* 게시판 목록 페이지 접속(페이징 적용) */
 	@GetMapping("/list")
 	public void boardListGET(BoardVO boardVo ,Model model, Criteria cri) {
@@ -245,7 +237,7 @@ public class BoardController {
 		try {
 			List<BoardVO> list = boardService.getListPaging(cri);
 			model.addAttribute("list", list);
-
+		
 			int total = boardService.getTotal();
 			model.addAttribute("listTotal", total);
 			
@@ -470,6 +462,25 @@ public class BoardController {
 		    inputStream.read(data);
 		} catch (IOException e) {
 		    e.printStackTrace();
+		}
+		return data;
+	}
+	@GetMapping("/listImage")
+	@ResponseBody
+	public byte[] listImage(int bno) throws SQLException {
+		List<BoardVO> fileList = boardService.listFilePath(bno);
+		String path = fileList.get(0).getATTACH_PATH();
+		
+		byte[] data = new byte[0];
+		String inputFile = path;
+		
+		try {
+			InputStream inputStream = new FileInputStream(inputFile);
+			long fileSize = new File(inputFile).length();
+			data = new byte[(int) fileSize];
+			inputStream.read(data);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return data;
 	}

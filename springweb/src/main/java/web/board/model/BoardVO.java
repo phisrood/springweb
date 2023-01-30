@@ -32,11 +32,9 @@ public class BoardVO {
     /* 댓글 개수 */
     private int repCount;
     
-    private String ATTACH_PATH;
+    private String ATTACH_PATH; 
     private int FILE_NO;
 
-	private List<AttachFileVO> attachList;
-	
 
 	@Override
 	public String toString() {

@@ -15,41 +15,6 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 	<style>
-	
-	
-		/* .login_area{
-			width: 25%;
-			height: 100%;
-			display: inline-block;	
-			text-align: center;		
-		} */
-		/* 로그인 성공 영역 */
-		./* login_success_area{
-		    height: 62%;
-		    width: 80%;
-		    border: 2px solid #7474ad;
-		    border-radius: 15px;
-		    margin: 5% auto;
-		    padding-top: 5%;
-		}
-		.login_success_area>span{
-		    display : block;
-		    text-align: left;
-		    margin-left: 10%;
-		}
-		.login_success_area>a{
-		    font-size: 12px;
-		    font-weight: 900;
-		    display: inline-block;
-		    margin-top: 5px;
-		    background: #e1e5e8;
-		    width: 82px;
-		    height: 22px;
-		    line-height: 22px;
-		    border-radius: 25px;
-		    color: #606267; 
-		    cursor: pointer;   
-		} */
 	</style>
 </head>
 <body>
@@ -81,6 +46,7 @@
 				<thead>
 					<tr>
 						<th class="bno_width">번호</th>
+						<th class="bno_width">사진</th>
 						<th class="title_width">제목</th>
 						<th class="writer_width">작성자</th>
 						<th class="regdate_width">작성일</th>
@@ -91,6 +57,16 @@
 						<c:forEach items="${list}" var="list">
 							<tr>
 								<td><c:out value="${list.rownum}"/></td>
+								<c:url var="imageUrl" value="/board/listImage">
+									<c:param name="bno" value="${list.bno }" />
+								</c:url>
+								<c:if test="${list.ATTACH_PATH ne null}">
+									<td><img alt="" src="${imageUrl }" style='width:100px;'></td>
+								</c:if>
+								<c:if test="${list.ATTACH_PATH eq null}">
+									<td></td>
+								</c:if>
+								<c:if test=""></c:if>
 								<td>
 									<a class="move" href='<c:out value="${list.bno}"/>'>
 										<c:out value="${list.title}"/>

@@ -32,6 +32,7 @@ public interface BoardService {
 	
 	/* 첨부파일이미지 경로*/
 	public List<BoardVO> selectFilePath(int fILE_NO) throws SQLException;
+	public List<BoardVO> listFilePath(int bno)throws SQLException;
 	
 
 }

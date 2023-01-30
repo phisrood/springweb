@@ -101,6 +101,10 @@ public class BoardServiceImpl implements BoardService{
 	public List<BoardVO> selectFilePath(int fILE_NO) throws SQLException{
 		return (List<BoardVO>) commonDao.selectList("selectFilePath", fILE_NO);
 	}
+	@Override
+	public List<BoardVO> listFilePath(int bno) throws SQLException {
+		return (List<BoardVO>) commonDao.selectList("listFilePath", bno);
+	}
 	
 
 

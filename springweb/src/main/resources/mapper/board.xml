@@ -23,14 +23,17 @@
 	<!-- 게시판 목록(페이징) -->
 	<select id="getListPaging" resultType="web.board.model.BoardVO">
 	    <![CDATA[
-	    	SELECT ROWNUM , BNO,TITLE, CONTENT, WRITER, REGDATE, UPDATEDATE,
-	    	       (SELECT COUNT(*)
-					FROM YUN_REPLY R
-					WHERE R.BNO  = B.BNO
-					AND RDEPTH = 0       ) AS repCount  	
-			FROM YUNBOARD B ORDER BY BNO DESC offset (#{pageNum}-1)*10 ROWS FETCH NEXT #{amount} ROWS ONLY		
-	    ]]>
-	     
+	    	SELECT B.BNO, B.TITLE, B.CONTENT, B.WRITER, B.REGDATE, B.UPDATEDATE,
+		      (SELECT COUNT(*) 
+		       FROM YUN_REPLY R 
+		       WHERE R.BNO = B.BNO 
+		       AND RDEPTH = 0 ) AS repCount ,
+		       LISTAGG(F.ATTACH_PATH, ',') WITHIN GROUP (ORDER BY F.ATTACH_PATH DESC) AS ATTACH_PATH
+		FROM YUNBOARD B
+		LEFT JOIN YUN_FILE F ON B.BNO = F.BNO
+		GROUP BY B.BNO, B.TITLE, B.CONTENT, B.WRITER, B.REGDATE, B.UPDATEDATE
+		ORDER BY BNO DESC offset (#{pageNum}-1)*10 ROWS FETCH NEXT #{amount} ROWS ONLY	
+	    ]]>     
     </select>
     
     <!-- 게시판 총 개수 -->
@@ -72,6 +75,14 @@
 		SELECT FILE_NO, ORG_FILE_NAME, ROUND(FILE_SIZE/1024,1) AS FILE_SIZE, ATTACH_PATH
         FROM YUN_FILE
         WHERE FILE_NO = #{FILE_NO}
+        AND DEL_GB = 'N'
+        ORDER BY FILE_NO ASC
+	</select>
+	<!-- 첨부파일 목록경로 조회 -->
+	<select id="listFilePath" parameterType="int" resultType="web.board.model.BoardVO">
+		SELECT FILE_NO, ORG_FILE_NAME, ROUND(FILE_SIZE/1024,1) AS FILE_SIZE, ATTACH_PATH
+        FROM YUN_FILE
+        WHERE BNO = #{BNO}
         AND DEL_GB = 'N'
         ORDER BY FILE_NO ASC
 	</select>

@@ -71,8 +71,8 @@
 			</div>
 			</form>
 			<div class="btn_wrap">
-				<a class="btn fileAdd_btn">파일추가</button>
 				<a class="btn btn-secondary" id="list_btn">목록</a>
+				<a class="btn fileAdd_btn">파일추가</button>
 				<a class="btn btn-warning" id="modify_btn">수정하기</a>
 				<a class="btn btn-danger" id="delete_btn">삭제하기</a>
 				<a class="btn btn-primary" id="cancel_btn">수정취소</a>
@@ -137,7 +137,15 @@
 	function fn_addFile(){
 		var fileIndex = 1;
 		$(".fileAdd_btn").on("click", function(){
-			$("#fileIndex").append("<div><input type='file' style='float:left;' name='file_"+(fileIndex++)+"'>"+"</button>"+"<button type='button' id='fileDelBtn'>"+"삭제"+"</button></div>");
+			var fileHtml = "";
+			
+			fileHtml += "<div>";
+			fileHtml += "	<input type='file' style='float:left;' name='file_"+(fileIndex++)+"'>";
+			fileHtml += "	<button type='button' id='fileDelBtn'>삭제</button>";
+			fileHtml += "</div>";
+			
+			$("#fileIndex").append(fileHtml);
+
 		});
 		$(document).on("click","#fileDelBtn", function(){
 			$(this).parent().remove();
