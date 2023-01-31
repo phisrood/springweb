@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Data;
 
 
-@Data
+
 public class BoardVO {
 
     /* 게시판 제목 */
@@ -21,15 +21,16 @@ public class BoardVO {
     /* 등록 날짜 */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date regdate;
-    
     /* 수정 날짜 */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateDate;
+    
     /* 게시판 번호 */
     private int bno;
-    private int rownum;
-    
-    /* 댓글 개수 */
+    private int rownum;  //<-지우기
+    private int num; 
+
+	/* 댓글 개수 */
     private int repCount;
     
     private String ATTACH_PATH; 
@@ -39,8 +40,8 @@ public class BoardVO {
 	@Override
 	public String toString() {
 		return "BoardVO [title=" + title + ", content=" + content + ", writer=" + writer + ", regdate=" + regdate
-				+ ", updateDate=" + updateDate + ", bno=" + bno + ", rownum=" + rownum + ", repCount=" + repCount
-				+ ", ATTACH_PATH=" + ATTACH_PATH + ", FILE_NO=" + FILE_NO + "]";
+				+ ", updateDate=" + updateDate + ", bno=" + bno + ", rownum=" + rownum + ", num=" + num + ", repCount="
+				+ repCount + ", ATTACH_PATH=" + ATTACH_PATH + ", FILE_NO=" + FILE_NO + "]";
 	}
 	
 	public String getTitle() {
@@ -132,6 +133,14 @@ public class BoardVO {
 
 	public void setATTACH_PATH(String aTTACH_PATH) {
 		ATTACH_PATH = aTTACH_PATH;
+	}
+	
+    public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
 	}
 	
 }

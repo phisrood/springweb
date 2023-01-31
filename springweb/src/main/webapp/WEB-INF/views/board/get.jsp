@@ -56,20 +56,20 @@
 			</div>
 			<div class="form-group">
 				<label>첨부파일</label><span style='color: crimson;'>[${fileCnt}]</span>
-					<div style='padding:15px 0px 5px 20px;'>
-						<c:forEach var="file" items="${file }">
-							<c:url var="imageUrl" value="/board/getImage">
-								<c:param name="FILE_NO" value="${file.FILE_NO }" />
-							</c:url>
-							<ul>
-								<li>
-									<img style='width: 20px;' src='/resources/img/attach.png' >
-									<a href="#" onclick="fn_fileDown('${file.FILE_NO}'); return false;">${file.ORG_FILE_NAME}</a>(${file.FILE_SIZE}kb)<br/>
-									<img alt="" src="${imageUrl}" width="500px;">
-								</li>
-							</ul>
-						</c:forEach>
-					</div>
+				<div style='padding:15px 0px 5px 20px;'>
+					<c:forEach var="file" items="${file }">
+						<c:url var="imageUrl" value="/board/getImage">
+							<c:param name="FILE_NO" value="${file.FILE_NO }" />
+						</c:url>
+						<ul>
+							<li>
+								<img style='width: 20px;' src='/resources/img/attach.png' >
+								<a href="#" onclick="fn_fileDown('${file.FILE_NO}'); return false;">${file.ORG_FILE_NAME}</a>(${file.FILE_SIZE}kb)<br/>
+								<img alt="" src="${imageUrl}" width="500px;">
+							</li>
+						</ul>
+					</c:forEach>
+				</div>
 			</div>
 			
 			<div class="btn_wrap">
@@ -103,7 +103,7 @@
 					<div class="form-group">
 						<label for="rWriter" class="col-sm-2 control-label">댓글 작성자</label>
 						<div class="col-sm-2">
-							<input class="form-control" type="text" id="rWriter" name="rWriter" value="${user_nm }" readonly/>
+							<input class="form-control" type="text" id="rWriter" name="rWriter" value="${user_nm}" readonly/>
 						</div>
 					</div>
 					<div class="form-group">
@@ -219,7 +219,7 @@
 	<script>
 	$(function(){
 
-	});
+	});	
 
 	var form = $("#infoForm");
 	
@@ -229,8 +229,9 @@
 		form.find("#FILE_NO").remove();
 		form.attr("action", "/board/list");
 		form.submit();
-
+		location.href="/board/list" ;
 	});
+	
 	
 	/* 수정하기버튼 클릭 */
 	$("#modify_btn").on("click", function(e){

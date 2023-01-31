@@ -18,7 +18,6 @@
 	</style>
 </head>
 <body>
-
 	<div class="container">
 		<div class="login_area">
 				<!-- 로그인하지 않은 상태  -->
@@ -45,30 +44,29 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th class="bno_width">번호</th>
-						<th class="bno_width">사진</th>
-						<th class="title_width">제목</th>
-						<th class="writer_width">작성자</th>
-						<th class="regdate_width">작성일</th>
-						<th class="updatedate_width">수정일</th>
+						<th style="width:5%;text-align:center;">번호</th>
+						<th style="width:1%;">☆</th>
+						<th>제목</th>
+						<th style="width:9%;">작성자</th>
+						<th style="width:9%;text-align:center;">작성일</th>
+						<th style="width:9%;text-align:center;">수정일</th>
 					</tr>
 				</thead>
 				<c:if test="${listTotal ne 0}">
-						<c:forEach items="${list}" var="list">
+						<c:forEach items="${list}" var="list" >
 							<tr>
-								<td><c:out value="${list.rownum}"/></td>
+								<td style="text-align:center;"><c:out value="${list.num}" /></td>
 								<c:url var="imageUrl" value="/board/listImage">
-									<c:param name="bno" value="${list.bno }" />
+									<c:param name="bno" value="${list.bno}" />
 								</c:url>
 								<c:if test="${list.ATTACH_PATH ne null}">
-									<td><img alt="" src="${imageUrl }" style='width:100px;'></td>
+									<td><img alt="없음" src="${imageUrl }" width="80" height="80"></td>
 								</c:if>
 								<c:if test="${list.ATTACH_PATH eq null}">
 									<td></td>
 								</c:if>
-								<c:if test=""></c:if>
 								<td>
-									<a class="move" href='<c:out value="${list.bno}"/>'>
+									<a class="move" href='<c:out value="${list.bno}" />'>
 										<c:out value="${list.title}"/>
 										<c:if test="${list.repCount ne 0}">
 											<small>
@@ -78,12 +76,12 @@
 									</a>					
 								</td>
 								<td><c:out value="${list.writer}"/></td>				
-								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${list.regdate}"/></td>
-								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${list.updateDate}"/></td>				
+								<td style="text-align:center;"><fmt:formatDate pattern="yyyy-MM-dd" value="${list.regdate}"/></td>
+								<td style="text-align:center;"><fmt:formatDate pattern="yyyy-MM-dd" value="${list.updateDate}"/></td>				
 							</tr>
 						</c:forEach>
 				</c:if>
-				<c:if test="${listTotal == 0 }">
+				<c:if test="${listTotal == 0}">
 					<tr><td colspan="5" style="text-align: center;">등록된 글이 없습니다.</td></tr>
 				</c:if>
 				
@@ -94,17 +92,17 @@
 				<ul id="pageInfo" class="pagination">		
 					<!-- 이전페이지 버튼 -->
 					<c:if test="${pageMaker.prev}">
-						<li class="pageInfo_btn previous"><a href="${pageMaker.startPage-1 }">Previous</a></li>
+						<li class="pageInfo_btn previous"><a href="${pageMaker.startPage-1}">Previous</a></li>
 					</c:if>
 					
 					<!-- 각 번호 페이지 버튼 -->
 					<c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-						<li class='pageInfo_btn ${pageMaker.cri.pageNum==num?"active":"" } '><a href="${num}">${num}</a></li>
+						<li class='pageInfo_btn ${pageMaker.cri.pageNum==num?"active":""} '><a href="${num}">${num}</a></li>
 					</c:forEach>
 					
 					<!-- 다음페이지 버튼 -->
 					<c:if test="${pageMaker.next}">
-						<li class="pageInfo_btn next"><a href="${pageMaker.endPage+1 }">Next</a></li>
+						<li class="pageInfo_btn next"><a href="${pageMaker.endPage+1}">Next</a></li>
 					</c:if>
 				</ul>
 			</div>
@@ -113,16 +111,18 @@
 		<form id="moveForm" method="get">
 			<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
 			<input type="hidden" name="amount" value="${pageMaker.cri.amount }">	
+		</form>
+		
+		<form id="insertForm" method="get">
+			<input type="hidden" name="bno" value="">					
+			
 			<c:if test="${member != null }">			
 				<input type="hidden" name="user_id" value="${member.user_id}">			
 				<input type="hidden" name="user_nm" value="${member.user_nm}">			
 			</c:if>
 			<c:if test="${member == null }">
 				<input type="hidden" name="user_id" value="">	
-			</c:if>
-		</form>
-		<form id="insertForm" method="get">
-			<input type="hidden" name="user_id" value="${member.user_id}">				
+			</c:if>		
 		</form>
 		</section>
 		
@@ -157,31 +157,40 @@
 			}
 		});
 		
+
+		
+		
+		
+		
+		
+		
+		
 		var moveForm = $("#moveForm");
-		var insertForm = $("#insertForm");
+		var form = $("#insertForm");
 		
 		$(".move").on("click", function(e){
+			
 			e.preventDefault();
-			moveForm.append("<input type='hidden' name='bno' value='"+ $(this).attr("href") +"'>");
-			moveForm.attr("action", "/board/get");
-			moveForm.submit();
+			
+			form.find("input[name=bno]").remove();
+			form.append("<input type='hidden' name='bno' value='"+ $(this).attr("href") +"'>");
+			form.attr("action", "/board/get");
+			form.submit();
 		});
 		
 		$("#insertBtn").click(function(){
 			if(${member != null }){
-				insertForm.attr("action", "/board/insert");
-				insertForm.submit();
-				
-				
+				form.attr("action", "/board/insert");
+				form.submit();
 			}else{
 				alert("게시글 등록은 로그인한 상태에서만 가능합니다.");
 				return false;
-			};
-			
+			}	
 		});
 		
 		$("#pageInfo a").on("click", function(e){
 			e.preventDefault(); //a태그 동작 멈춤
+			
 			moveForm.find("input[name='pageNum']").val($(this).attr("href")); //<form>태그 내부 pageNum과 관련된 <input>태그의 value속성값을 클릭한 <a>태그의 페이지 번호 찾아줘
 			moveForm.attr("action", "/board/list") //<form>태그 action 속성 추가 및 '/board/list'을 속성값으로 추가
 			moveForm.submit(); //<form>태그 서버 전송
