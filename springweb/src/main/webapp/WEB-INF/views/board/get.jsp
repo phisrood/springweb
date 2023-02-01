@@ -65,7 +65,7 @@
 							<li>
 								<img style='width: 20px;' src='/resources/img/attach.png' >
 								<a href="#" onclick="fn_fileDown('${file.FILE_NO}'); return false;">${file.ORG_FILE_NAME}</a>(${file.FILE_SIZE}kb)<br/>
-								<img alt="" src="${imageUrl}" width="500px;">
+								<img alt="" src="${imageUrl}" width="600px;">
 							</li>
 						</ul>
 					</c:forEach>
@@ -196,6 +196,8 @@
 				<input type="hidden" id="bno" name="bno" value='<c:out value="${pageInfo.bno }"/>' /> 
 				<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>' /> 
 				<input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>' />
+				<input type="hidden" name="keyword" value='<c:out value="${cri.keyword}"/>' />
+				<input type="hidden" name="type" value='<c:out value="${cri.type}"/>'>
 				<input type="hidden" id="FILE_NO" name="FILE_NO" value="" />
 				<input type="hidden" name="fileCnt" value="${fileCnt}" />
 			

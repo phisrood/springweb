@@ -12,6 +12,28 @@
 	</resultMap> 
 	-->
 	
+	<!-- 검색 조건문 -->
+	<sql id="criteria">
+		<trim prefix="AND (" suffix=")" prefixOverrides="OR">
+			<foreach collection="typeArr" item="type">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'T'.toString()">
+							TITLE LIKE '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'C'.toString()">
+							CONTENT LIKE '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'W'.toString()">
+							WRITER LIKE '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+	
+	
 	<!-- 게시판 목록조회 -->
 	<select id="getList" resultType="web.board.model.BoardVO">
 		<!-- SELECT ROWNUM, BNO, TITLE, WRITER, CONTENT 
@@ -29,8 +51,12 @@
 		       WHERE R.BNO = B.BNO 
 		       AND RDEPTH = 0 ) AS repCount ,
 		       LISTAGG(F.ATTACH_PATH, ',') WITHIN GROUP (ORDER BY F.ATTACH_PATH DESC) AS ATTACH_PATH
-			FROM YUNBOARD B
-			LEFT JOIN YUN_FILE F ON B.BNO = F.BNO
+			FROM YUNBOARD B LEFT JOIN YUN_FILE F ON B.BNO = F.BNO
+		]]>	
+		<if test="keyword != null">
+			<include refid="criteria"></include>
+		</if>	
+		<![CDATA[	
 			GROUP BY B.BNO, B.TITLE, B.CONTENT, B.WRITER, B.REGDATE, B.UPDATEDATE
 			ORDER BY BNO DESC offset (#{pageNum}-1)*10 ROWS FETCH NEXT #{amount} ROWS ONLY	
 	    ]]>     
@@ -38,7 +64,11 @@
     
     <!-- 게시판 총 개수 -->
     <select id="getTotal" resultType="int">
-    	SELECT COUNT(*) FROM YUNBOARD
+    	SELECT COUNT(*) 
+    	FROM YUNBOARD
+    	<if test="keyword != null">
+    		WHERE BNO > 0 <include refid="criteria"></include>
+    	</if>
     </select>
 	
 	<!-- 게시판 등록 -->

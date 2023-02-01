@@ -38,14 +38,32 @@
 		</div>
 		<h1>게시판 목록</h1>
 		<hr/>
-		<a id="insertBtn" type="button" class="btn btn-primary btn-sm">게시판 등록</a>
+		
+		<div style="display: inline-flex;">
+			<div>		
+				<a id="insertBtn" type="button" class="btn btn-primary btn-sm">게시글 등록</a>
+			</div>
+			
+	        <div class="search_area" style="position: relative;left: 7px;">
+	        	<select style="height:30px;text-align:center;" >
+				  <option value="" <c:out value="${pageMaker.cri.type == null?'selected':''}"/>>=전체=</option>
+				  <option value="T" <c:out value="${pageMaker.cri.type eq 'T'?'selected':''}"/>>제목</option>
+				  <option value="C" <c:out value="${pageMaker.cri.type eq 'C'?'selected':''}"/>>내용</option>
+				  <option value="W" <c:out value="${pageMaker.cri.type eq 'W'?'selected':''}"/>>작성자</option>
+				  <option value="TW" <c:out value="${pageMaker.cri.type eq 'TC'?'selected':''}"/>>제목+내용</option>
+				</select>
+	            <input style="height:30px;" type="text" name="keyword" value="${pageMaker.cri.keyword }">
+	            <button style="height:30px;height:30px;border:1px solid gray;">검색</button>
+	        </div>
+	        
+    	</div>
 		
 		<section id="container">
 			<table class="table table-hover">
 				<thead>
 					<tr>
 						<th style="width:5%;text-align:center;">번호</th>
-						<th style="width:1%;">☆</th>
+						<th style="width:1%;text-align:center;">☆</th>
 						<th>제목</th>
 						<th style="width:9%;">작성자</th>
 						<th style="width:9%;text-align:center;">작성일</th>
@@ -109,8 +127,10 @@
 		</div>
 		
 		<form id="moveForm" method="get">
-			<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
-			<input type="hidden" name="amount" value="${pageMaker.cri.amount }">	
+			<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+			<input type="hidden" name="amount" value="${pageMaker.cri.amount}">	
+			<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
+			<input type="hidden" name="type" value="${pageMaker.cri.type}">
 		</form>
 		
 		<form id="insertForm" method="get">
@@ -155,29 +175,64 @@
 					location.replace("/board/list");
 				}
 			}
+			
+			/* 검색버튼 엔터 누를시 */
+			$(".search_area input").keydown(function(keyNum){
+				if(keyNum.keyCode == 13){ 
+					//searchChk();
+					var searchVal = $(".search_area input[name='keyword']").val();
+					var searchType = $(".search_area select").val();
+					
+					moveForm.find("input[name='keyword']").val(searchVal);
+					moveForm.find("input[name='type']").val(searchType);
+					moveForm.find("input[name='pageNum']").val(1);
+					moveForm.submit();
+				}
+			})
 		});
 		
-
 		
-		
-		
-		
-		
+		function searchChk(){
+			var type = $(".search_area select").val();
+			var keyword = $(".search_area input[name='keyword']").val();
+			
+			if(!type){
+				alert("검색 종류를 선택하세요");
+				return false;
+			};
+			if(!keyword){
+				alert("키워드를 입력하세요");
+				return false;
+			};
+		};
 		
 		
 		var moveForm = $("#moveForm");
 		var form = $("#insertForm");
 		
-		$(".move").on("click", function(e){
-			
+		/* 검색버튼 */
+		$(".search_area button").on("click", function(e){
 			e.preventDefault();
+			//searchChk();
+			var searchVal = $(".search_area input[name='keyword']").val();
+			var searchType = $(".search_area select").val();
 			
+			moveForm.find("input[name='keyword']").val(searchVal);
+			moveForm.find("input[name='type']").val(searchType);
+			moveForm.find("input[name='pageNum']").val(1);
+			moveForm.submit();
+		})
+		
+		/* 상세조회 */
+		$(".move").on("click", function(e){
+			e.preventDefault();
 			form.find("input[name=bno]").remove();
 			form.append("<input type='hidden' name='bno' value='"+ $(this).attr("href") +"'>");
 			form.attr("action", "/board/get");
 			form.submit();
 		});
 		
+		/* 게시글 등록 */
 		$("#insertBtn").click(function(){
 			if(${member != null }){
 				form.attr("action", "/board/insert");
@@ -188,6 +243,7 @@
 			}	
 		});
 		
+		/* 페이지네이션 */
 		$("#pageInfo a").on("click", function(e){
 			e.preventDefault(); //a태그 동작 멈춤
 			

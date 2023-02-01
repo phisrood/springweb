@@ -36,8 +36,8 @@ public class BoardServiceImpl implements BoardService{
 
 	/* 게시판 총 개수 */
 	@Override
-	public int getTotal() throws SQLException {
-		return commonDao.selectTotal("getTotal");
+	public int getTotal(Criteria cri) throws SQLException {
+		return commonDao.selectTotal("getTotal", cri);
 	}
 	
 	/* 등록 */

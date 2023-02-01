@@ -10,12 +10,14 @@ import web.board.model.BoardVO;
 import web.board.model.Criteria;
 
 public interface BoardService {
-	/* 목록조회 */
+	/* 목록조회: 지우기 필요없음 */
 	public List<BoardVO> getList() throws SQLException;
+	
+	
 	/* 게시판 목록(페에징 적용) */
 	public List<BoardVO> getListPaging(Criteria cri) throws SQLException;
 	/* 게시판 총 개수*/
-	public int getTotal() throws SQLException;
+	public int getTotal(Criteria cri) throws SQLException;
 	/* 등록 (첨부파일)*/
 	public void insertBoard(BoardVO boardVo, MultipartHttpServletRequest mpRequest) throws SQLException, Exception;
 	/* 상세조회 */

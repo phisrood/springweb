@@ -59,8 +59,8 @@ public class CommonDao {
     
 
     /* 게시글 총 개수 */
-    public int selectTotal(String queryId) throws SQLException {
-    	return sqlSession.selectOne(queryId);
+    public int selectTotal(String queryId, Object params) throws SQLException {
+    	return sqlSession.selectOne(queryId, params);
     }  
 
     /* 첨부파일 업로드 */
