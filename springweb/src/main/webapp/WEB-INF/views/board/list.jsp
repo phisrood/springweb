@@ -52,7 +52,7 @@
 				  <option value="W" <c:out value="${pageMaker.cri.type eq 'W'?'selected':''}"/>>작성자</option>
 				  <option value="TW" <c:out value="${pageMaker.cri.type eq 'TC'?'selected':''}"/>>제목+내용</option>
 				</select>
-	            <input style="height:30px;" type="text" name="keyword" value="${pageMaker.cri.keyword }">
+	            <input style="height:30px;padding-top:0px;" type="text" name="keyword" value="${pageMaker.cri.keyword }">
 	            <button style="height:30px;height:30px;border:1px solid gray;">검색</button>
 	        </div>
 	        
@@ -154,6 +154,8 @@
 	
 	<script>
 		$(document).ready(function(){
+			$(".search_area input[name=keyowrd]").val("");
+			
 			var result = '<c:out value="${result}" />';
 			
 			checkAlert(result);
