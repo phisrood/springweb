@@ -53,7 +53,7 @@
 				  <option value="TW" <c:out value="${pageMaker.cri.type eq 'TC'?'selected':''}"/>>제목+내용</option>
 				</select>
 	            <input style="height:30px;padding-top:0px;" type="text" name="keyword" value="${pageMaker.cri.keyword }">
-	            <button style="height:30px;height:30px;border:1px solid gray;">검색</button>
+	            <button style="height:31px;padding-top:5px;border:1px solid gray;" >검색</button>
 	        </div>
 	        
     	</div>
@@ -112,7 +112,7 @@
 				<ul id="pageInfo" class="pagination">		
 					<!-- 이전페이지 버튼 -->
 					<c:if test="${pageMaker.prev}">
-						<li class="pageInfo_btn previous"><a href="${pageMaker.startPage-1}">Previous</a></li>
+						<li class="pageInfo_btn previous"><a href="${pageMaker.startPage-1}">&lt;</a></li>
 					</c:if>
 					
 					<!-- 각 번호 페이지 버튼 -->
@@ -122,7 +122,7 @@
 					
 					<!-- 다음페이지 버튼 -->
 					<c:if test="${pageMaker.next}">
-						<li class="pageInfo_btn next"><a href="${pageMaker.endPage+1}">Next</a></li>
+						<li class="pageInfo_btn next"><a href="${pageMaker.endPage+1}">&gt;</a></li>
 					</c:if>
 				</ul>
 			</div>
