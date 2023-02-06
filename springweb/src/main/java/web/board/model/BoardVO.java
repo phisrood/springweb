@@ -35,13 +35,17 @@ public class BoardVO {
     
     private String ATTACH_PATH; 
     private int FILE_NO;
+    
+    private int hit; 
+
+
 
 
 	@Override
 	public String toString() {
 		return "BoardVO [title=" + title + ", content=" + content + ", writer=" + writer + ", regdate=" + regdate
-				+ ", updateDate=" + updateDate + ", bno=" + bno + ", rownum=" + rownum + ", num=" + num + ", repCount="
-				+ repCount + ", ATTACH_PATH=" + ATTACH_PATH + ", FILE_NO=" + FILE_NO + "]";
+				+ ", updateDate=" + updateDate + ", bno=" + bno + ", num=" + num + ", repCount=" + repCount
+				+ ", ATTACH_PATH=" + ATTACH_PATH + ", FILE_NO=" + FILE_NO + ", hit=" + hit + "]";
 	}
 	
 	public String getTitle() {
@@ -141,6 +145,14 @@ public class BoardVO {
 
 	public void setNum(int num) {
 		this.num = num;
+	}
+	
+	public int getHit() {
+		return hit;
+	}
+
+	public void setHit(int hit) {
+		this.hit = hit;
 	}
 	
 }

@@ -36,5 +36,8 @@ public interface BoardService {
 	public List<BoardVO> selectFilePath(int fILE_NO) throws SQLException;
 	public List<BoardVO> listFilePath(int bno)throws SQLException;
 	
+	/* 게시판 조회수 */
+	public void boardHit(int bno) throws SQLException;
+	
 
 }

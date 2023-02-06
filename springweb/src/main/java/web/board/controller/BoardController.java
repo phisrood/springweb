@@ -274,6 +274,9 @@ public class BoardController {
 	@GetMapping("/get")
 	public void boardGetPageGET(String user_id, String user_nm, ReplyVO replyVo, int bno, Model model, Criteria cri) {
 		try {
+			//조회수 증가
+			boardService.boardHit(bno);
+			
 			model.addAttribute("pageInfo", boardService.getPage(bno));
 			model.addAttribute("cri", cri);
 			

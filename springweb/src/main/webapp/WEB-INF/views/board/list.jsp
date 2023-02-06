@@ -66,6 +66,7 @@
 						<th style="width:1%;text-align:center;">☆</th>
 						<th>제목</th>
 						<th style="width:9%;">작성자</th>
+						<th style="width:6%;text-align:center;">조회수</th>
 						<th style="width:9%;text-align:center;">작성일</th>
 						<th style="width:9%;text-align:center;">수정일</th>
 					</tr>
@@ -94,6 +95,7 @@
 									</a>					
 								</td>
 								<td><c:out value="${list.writer}"/></td>				
+								<td style="text-align:center;"><c:out value="${list.hit}"/></td>				
 								<td style="text-align:center;"><fmt:formatDate pattern="yyyy-MM-dd" value="${list.regdate}"/></td>
 								<td style="text-align:center;"><fmt:formatDate pattern="yyyy-MM-dd" value="${list.updateDate}"/></td>				
 							</tr>

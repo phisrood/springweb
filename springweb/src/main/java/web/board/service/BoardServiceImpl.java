@@ -106,6 +106,12 @@ public class BoardServiceImpl implements BoardService{
 		return (List<BoardVO>) commonDao.selectList("listFilePath", bno);
 	}
 	
+	/* 게시판 조회수 */
+	@Override
+	public void boardHit(int bno) throws SQLException {
+		commonDao.update("boardHit", bno);
+	}
+	
 
 
 
