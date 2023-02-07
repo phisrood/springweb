@@ -15,6 +15,7 @@
 
 </head>
 <body>
+	<script src="https://cdn.ckeditor.com/ckeditor5/36.0.0/classic/ckeditor.js"></script>
 	<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
@@ -51,6 +52,22 @@
 			});
 
 			fn_addFile();
+			
+			
+			
+			
+			ClassicEditor
+				.create(document.querySelector('#content'),{
+					toolbar: {
+						items: [ 'bold', 'italic', '|', 'undo', 'redo', '-', 'numberedList', 'bulletedList']
+					}
+
+				})
+				.catch(error=>{
+					console.error(error);
+				});
+			
+			
 		});
 		
 		function fn_addFile(){

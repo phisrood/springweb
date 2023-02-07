@@ -53,7 +53,7 @@
 				  <option value="TW" <c:out value="${pageMaker.cri.type eq 'TC'?'selected':''}"/>>제목+내용</option>
 				</select>
 	            <input style="height:30px;padding-top:0px;" type="text" name="keyword" value="${pageMaker.cri.keyword }">
-	            <button style="height:31px;padding-top:5px;border:1px solid gray;" >검색</button>
+	            <button style="height:31px;padding-top:5px;border:1px solid gray;" class="btn">검색</button>
 	        </div>
 	        
     	</div>
@@ -156,8 +156,9 @@
 	
 	<script>
 		$(document).ready(function(){
-			$(".search_area input[name=keyowrd]").val("");
-			
+			//새로고침 시 get파라미터 제거
+			history.replaceState({}, null, location.pathname);
+
 			var result = '<c:out value="${result}" />';
 			
 			checkAlert(result);
@@ -193,6 +194,18 @@
 					moveForm.submit();
 				}
 			})
+			
+			
+			/* 페이지네이션 */
+			$("#pageInfo a").on("click", function(e){
+				e.preventDefault(); //a태그 동작 멈춤
+				
+				moveForm.find("input[name='pageNum']").val($(this).attr("href")); //<form>태그 내부 pageNum과 관련된 <input>태그의 value속성값을 클릭한 <a>태그의 페이지 번호 찾아줘
+				moveForm.attr("action", "/board/list") //<form>태그 action 속성 추가 및 '/board/list'을 속성값으로 추가
+				moveForm.submit(); //<form>태그 서버 전송
+			});
+			
+			
 		});
 		
 		
@@ -247,14 +260,7 @@
 			}	
 		});
 		
-		/* 페이지네이션 */
-		$("#pageInfo a").on("click", function(e){
-			e.preventDefault(); //a태그 동작 멈춤
-			
-			moveForm.find("input[name='pageNum']").val($(this).attr("href")); //<form>태그 내부 pageNum과 관련된 <input>태그의 value속성값을 클릭한 <a>태그의 페이지 번호 찾아줘
-			moveForm.attr("action", "/board/list") //<form>태그 action 속성 추가 및 '/board/list'을 속성값으로 추가
-			moveForm.submit(); //<form>태그 서버 전송
-		});
+
 		
 		/* 로그아웃 버튼 클릭 */
 		$("#logoutBtn").click(function(){
