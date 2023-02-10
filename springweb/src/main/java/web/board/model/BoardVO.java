@@ -19,10 +19,10 @@ public class BoardVO {
     private String writer;
     
     /* 등록 날짜 */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date regdate;
     /* 수정 날짜 */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateDate;
     
     /* 게시판 번호 */

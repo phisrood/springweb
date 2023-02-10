@@ -11,7 +11,7 @@
   src="https://code.jquery.com/jquery-3.4.1.js"
   integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
   crossorigin="anonymous"></script>
-
+<script src="https://cdn.ckeditor.com/ckeditor5/36.0.0/classic/ckeditor.js"></script>
 <style type="text/css">
 	.btn_wrap{
 		padding-left : -2px;
@@ -39,7 +39,7 @@
 				</div>
 				<div class="form-group">
 					<label for="content" class="col-sm2 control-label">게시판 내용</label>
-					<textarea class="form-control" rows="3" name="content" ><c:out value="${pageInfo.content }" /></textarea>
+					<textarea class="form-control" rows="3" id="content" name="content" ><c:out value="${pageInfo.content }" /></textarea>
 				</div>
 
 			<div class="form-group">
@@ -58,11 +58,11 @@
 					
 
 			<c:forEach var="file" items="${file}" varStatus="var">
-				<div>
+				<div style='margin:7px 0px 21px 0px;'>
 					<input type="hidden" id="FILE_NO" name="FILE_NO_${var.index}" value="${file.FILE_NO }">
 					<input type="hidden" id="FILE_NAME" name="FILE_NAME" value="FILE_NO_${var.index}">
 					<a href="#" id="fileName" class="chk${var.index}" onclick="return false;">${file.ORG_FILE_NAME}</a>(${file.FILE_SIZE}kb)
-					<button id="fileDel" onclick="fn_del('${file.FILE_NO}','FILE_NO_${var.index}','${var.index}');" type="button">삭제</button><br>
+					<button class='btn btn-outline-secondary' id="fileDel" onclick="fn_del('${file.FILE_NO}','FILE_NO_${var.index}','${var.index}');" type="button">삭제</button><br>
 				</div>
 			</c:forEach>
 
@@ -72,7 +72,7 @@
 			</form>
 			<div class="btn_wrap">
 				<a class="btn btn-secondary" id="list_btn">목록</a>
-				<a class="btn fileAdd_btn">파일추가</button>
+				<a class="btn btn-success fileAdd_btn">파일추가</a>
 				<a class="btn btn-warning" id="modify_btn">수정하기</a>
 				<a class="btn btn-danger" id="delete_btn">삭제하기</a>
 				<a class="btn btn-primary" id="cancel_btn">수정취소</a>
@@ -101,6 +101,7 @@
 	
 	
 <script>
+	var geditor;
 	$(document).ready(function(){
 		fn_addFile();
 		
@@ -116,6 +117,7 @@
 		
 		//수정하기 버튼
 		$("#modify_btn").on("click", function(e){
+			mForm.find("textarea[name='content']").val(geditor.getData());
 			mForm.submit();
 		});
 		
@@ -131,6 +133,19 @@
 			form.attr("method", "post");
 			form.submit();
 		});
+		
+		
+		
+		ClassicEditor
+			.create(document.querySelector('#content'),{
+				toolbar: [ 'heading', 'bold', 'italic', 'insertTable','undo', 'redo', 'numberedList', 'bulletedList']
+			})
+			.then(editor => {
+			geditor = editor;
+		})
+		.catch(error=>{
+			console.error(error);
+		});
 	
 	});
 	
@@ -141,11 +156,11 @@
 		$(".fileAdd_btn").on("click", function(){
 			var fileHtml = "";
 			
-			fileHtml += "<div>";
-			fileHtml += "	<input type='file' style='float:left;' name='file_"+(fileIndex++)+"'>";
-			fileHtml += "	<button type='button' id='fileDelBtn'>삭제</button>";
+			fileHtml += "<div style='display:flex; margin:7px 0px'>";
+			fileHtml += "	<input class='form-control' type='file' style='width:auto; margin-right:3px;' name='file_"+(fileIndex++)+"'>";
+			fileHtml += "	<button type='button' class='btn btn-outline-secondary' id='fileDelBtn'>삭제</button>";		
 			fileHtml += "</div>";
-			
+
 			$("#fileIndex").append(fileHtml);
 
 		});
@@ -164,7 +179,6 @@
 		console.log('value========',value);
 		console.log('name========',name);
 		console.log('idx========',idx);
-		
 		
 		var chkClass = $('.chk'+idx).attr('class');
 		var chkDelClass = $('.del'+idx).attr('class');

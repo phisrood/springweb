@@ -46,11 +46,10 @@
 			
 	        <div class="search_area" style="position: relative;left: 7px;">
 	        	<select style="height:30px;text-align:center;" >
-				  <option value="" <c:out value="${pageMaker.cri.type == null?'selected':''}"/>>=전체=</option>
+				  <option value="TCW" <c:out value="${pageMaker.cri.type == TCW?'selected':''}"/>>=전체=</option>
 				  <option value="T" <c:out value="${pageMaker.cri.type eq 'T'?'selected':''}"/>>제목</option>
 				  <option value="C" <c:out value="${pageMaker.cri.type eq 'C'?'selected':''}"/>>내용</option>
 				  <option value="W" <c:out value="${pageMaker.cri.type eq 'W'?'selected':''}"/>>작성자</option>
-				  <option value="TW" <c:out value="${pageMaker.cri.type eq 'TC'?'selected':''}"/>>제목+내용</option>
 				</select>
 	            <input style="height:30px;padding-top:0px;" type="text" name="keyword" value="${pageMaker.cri.keyword }">
 	            <button style="height:31px;padding-top:5px;border:1px solid gray;" class="btn">검색</button>
@@ -96,8 +95,8 @@
 								</td>
 								<td><c:out value="${list.writer}"/></td>				
 								<td style="text-align:center;"><c:out value="${list.hit}"/></td>				
-								<td style="text-align:center;"><fmt:formatDate pattern="yyyy-MM-dd" value="${list.regdate}"/></td>
-								<td style="text-align:center;"><fmt:formatDate pattern="yyyy-MM-dd" value="${list.updateDate}"/></td>				
+								<td style="text-align:center;"><fmt:formatDate pattern="yyyy.MM.dd" value="${list.regdate}"/></td>
+								<td style="text-align:center;"><fmt:formatDate pattern="yyyy.MM.dd" value="${list.updateDate}"/></td>				
 							</tr>
 						</c:forEach>
 				</c:if>

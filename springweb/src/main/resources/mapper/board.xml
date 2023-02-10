@@ -96,8 +96,8 @@
 		<selectKey keyProperty="bno" resultType="int" order="BEFORE">
 	    	SELECT BOARD_SEQ.NEXTVAL FROM DUAL
 	    </selectKey>
-		INSERT INTO YUNBOARD (BNO, TITLE, WRITER, CONTENT) 
-		VALUES (#{bno}, #{title}, #{writer}, #{content})
+		INSERT INTO YUNBOARD (REGDATE, UPDATEDATE, BNO, TITLE, WRITER, CONTENT) 
+		VALUES (CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,#{bno}, #{title}, #{writer}, #{content})
 	</insert>
 	
 	<!-- 게시판 상세조회 -->
@@ -153,7 +153,7 @@
 	<!-- 게시판 수정 -->
 	<update id="modify">
 		UPDATE YUNBOARD 
-		SET TITLE=#{title}, CONTENT=#{content}, UPDATEDATE= sysdate
+		SET TITLE=#{title}, CONTENT=#{content}, UPDATEDATE= CURRENT_TIMESTAMP
 		WHERE BNO=#{bno}
 	</update>
 	

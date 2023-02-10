@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +10,8 @@
 		padding-left : -2px;
 		margin-top : 20px;
 	} 
+	/* ckeditor 높이 */
+	.ck-content {height: 300px;}
 </style>
 
 </head>
@@ -18,20 +19,28 @@
 	<script src="https://cdn.ckeditor.com/ckeditor5/36.0.0/classic/ckeditor.js"></script>
 	<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script type="text/javascript">
+	var geditor;
 		$(document).ready(function(){
 			
 			/* 등록버튼 체크*/
 			$("#insert_btn").on("click", function(e){
+				console.log( geditor.getData());
+				
 				var form = $("#infoForm") ; 
 
 				var title      = $('#title').val();
-				var content    = $('#content').val();
+				var content    = $('#content').val(geditor.getData());
 				var writer     = $('#writer').val(); 
 				var uploadFile = $('#uploadFile').val();
 				if((title == "" || title == null) || (content == "" || content == null) || (writer == "" || writer == null)){
+					console.log('content: ',content);
+					console.log('title: ',title);
+					console.log('writer: ',writer);
 					alert('입력해줘');
 					return false;
 				}
+				
+				form.find("textarea[name='content']").val(geditor.getData());
 				form.submit();
 			}); 
 
@@ -53,22 +62,22 @@
 
 			fn_addFile();
 			
-			
-			
-			
 			ClassicEditor
 				.create(document.querySelector('#content'),{
-					toolbar: {
-						items: [ 'bold', 'italic', '|', 'undo', 'redo', '-', 'numberedList', 'bulletedList']
-					}
-
+					  toolbar: [ 'heading', 'bold', 'italic', 'insertTable','undo', 'redo', 'numberedList', 'bulletedList']
+				})
+				.then(editor => {
+					geditor = editor;
 				})
 				.catch(error=>{
 					console.error(error);
-				});
-			
-			
+				}); 
+				
+
+
 		});
+		
+		
 		
 		function fn_addFile(){
 			var fileIndex = 1;
@@ -89,8 +98,7 @@
 			
 		}
 		
-		
-		
+
 		
 	</script>
 	<div class="container">
@@ -103,18 +111,16 @@
 				</div>
 				<div class="form-group">
 					<label for="content" class="col-sm-2 control-label">내용</label>
-					<textarea class="form-control" rows="3" name="content" id="content"></textarea>
+					<textarea class="form-control" name="content" id="content" ></textarea>
 				</div>
 				<div class="form-group">
 					<label for="writer" class="col-sm-2 control-label">작성자</label>
 					<input class="form-control" name="writer" id="writer" value="${member.user_nm }" readonly="readonly"/>
 				</div>
 				<div class="form-group" style="padding-top:14px;">
-					<!-- <label for="uploadFile" class="col-sm-2 control-label">업로드</label> -->
 					<div >
 						<div id="fileIndex"></div>
 					</div>
-<!-- 					<div class="select_img"><img src=""/></div> -->
 				</div>
 				
 			</form>

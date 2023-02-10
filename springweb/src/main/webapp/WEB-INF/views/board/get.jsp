@@ -8,6 +8,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 
+
+<script src="https://cdn.ckeditor.com/ckeditor5/36.0.0/classic/ckeditor.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 <!-- 합쳐지고 최소화된 최신 CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
@@ -15,10 +17,12 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 <style type="text/css">
-.btn_wrap {
-	padding-left: -2px;
-	margin-top: 20px;
-}
+	.btn_wrap {
+		padding-left: -2px;
+		margin-top: 20px;
+	}
+	/* ckeditor 높이 */
+	.ck-content {height: 500px;}
 </style>
 
 </head>
@@ -31,8 +35,16 @@
 		
 		<section id="container">
 			<div class="form-group">
-				<label for="bno" class="col-sm2 control-label">게시판 번호</label> 
-				<input class="form-control" name="bno" readonly="readonly" value='<c:out value="${pageInfo.bno }"/>' />
+				<label for="writer" class="col-sm2 control-label">작성자</label> 
+				<input class="form-control" name="writer" readonly="readonly" value='<c:out value="${pageInfo.writer}" />' />
+			</div>
+			<div class="form-group">
+				<label for="regdate" class="col-sm2 control-label">등록일</label> 
+				<input class="form-control" name="regdate" readonly="readonly" value='<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${pageInfo.regdate}"/>' />
+			</div>
+			<div class="form-group">
+				<label for="updateDate" class="col-sm2 control-label">수정일</label> 
+				<input class="form-control" name="updateDate" readonly="readonly" value='<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${pageInfo.updateDate}"/>' />
 			</div>
 			<div class="form-group">
 				<label for="title" class="col-sm2 control-label">게시판 제목</label> 
@@ -40,20 +52,9 @@
 			</div>
 			<div class="form-group">
 				<label for="content" class="col-sm2 control-label">게시판 내용</label>
-				<textarea class="form-control" rows="10" name="content" readonly="readonly"><c:out value="${pageInfo.content }" /></textarea>
+				<textarea class="form-control" rows="10" id="content" name="content" readonly="readonly"><c:out value="${pageInfo.content }" /></textarea>
 			</div>
-			<div class="form-group">
-				<label for="writer" class="col-sm2 control-label">작성자</label> 
-				<input class="form-control" name="writer" readonly="readonly" value='<c:out value="${pageInfo.writer}" />' />
-			</div>
-			<div class="form-group">
-				<label for="regdate" class="col-sm2 control-label">등록일</label> 
-				<input class="form-control" name="regdate" readonly="readonly" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.regdate}"/>' />
-			</div>
-			<div class="form-group">
-				<label for="updateDate" class="col-sm2 control-label">수정일</label> 
-				<input class="form-control" name="updateDate" readonly="readonly" value='<fmt:formatDate pattern="yyyy-MM-dd" value="${pageInfo.updateDate}"/>' />
-			</div>
+			
 			<div class="form-group">
 				<label>첨부파일</label><span style='color: crimson;'>[${fileCnt}]</span>
 				<div style='padding:15px 0px 5px 20px;'>
@@ -220,7 +221,19 @@
 
 	<script>
 	$(function(){
-
+		
+		ClassicEditor
+			.create(document.querySelector('#content'),{
+				toolbar:[]
+			})
+			.then(editor =>{
+				editor.enableReadOnlyMode('my-feature-id');
+			})
+			.catch(error=>{
+				console.error(error);
+		});
+		
+		
 	});	
 
 	var form = $("#infoForm");
