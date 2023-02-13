@@ -15,9 +15,45 @@
 </head>
 <body>
 	<div class="container">
-		<h1>메인화면</h1>
-		
+		<div class="container">
+			<div class="login_area">
+					<!-- 로그인하지 않은 상태  -->
+					<c:if test="${member == null }">
+						<div class="login_button">
+							<a href="/member/login">로그인</a>
+							<span><a href="/member/join">회원가입</a></span>
+						</div>
+					</c:if>
+							
+					<!-- 로그인한 상태 -->
+					<c:if test="${member != null }">
+						<div class="login_success_area">
+							<span>반갑습니다 ${member.user_nm}님♥</span>
+							<a id="logoutBtn" class='btn btn-link'>로그아웃</a>
+						</div>
+					</c:if>
+			</div>
+			<h1>메인화면</h1>
+			<div></div>
+			
 	</div>
 	
+	<script type="text/javascript">
+		$(function(){
+			  
+		});
+		
+		/* 로그아웃 버튼 클릭 */
+		$("#logoutBtn").click(function(){
+			$.ajax({
+				type: 'POST',
+				url: "/member/logout",
+				success: function(data){
+					alert("로그아웃 성공");
+					location.href = "/main/yunHome";
+				}
+			})
+		});
+	</script>
 </body>
 </html>

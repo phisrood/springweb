@@ -86,9 +86,6 @@ public class MemberController {
 	//RedirectAttributes -> 로그인 실패시 리다이렉트된 로그인 페이지에 실패를 의미하는 데이터를 전송하기 위해 
 	@PostMapping("/login")
 	public String loginPOST(HttpServletRequest request, MemberVO memberVo, RedirectAttributes rttr) throws Exception{
-//		System.out.println("login 메서드 진입");
-//      System.out.println("전달된 데이터 : " + memberVo);
-		
 		//session사용하기위해 session변수 선언 및 초기화
 		HttpSession session = request.getSession();
 		
@@ -104,8 +101,8 @@ public class MemberController {
         
         session.setAttribute("member", vo);             // 일치하는 아이디, 비밀번호 경우 (로그인 성공)
         
-        //return "redirect:/member/main";
-        return "redirect:/board/list";
+        return "redirect:/main/yunHome";
+        //return "redirect:/board/list";
 	}
 	
 	/* 메인페이지 로그아웃 */
@@ -123,7 +120,7 @@ public class MemberController {
 		 */
 		session.invalidate(); 
 		
-		//return "redirect:/member/main" ;
-		return "redirect:/board/list" ;
+		return "redirect:/main/yunHome" ;
+		//return "redirect:/board/list" ;
 	}
 }

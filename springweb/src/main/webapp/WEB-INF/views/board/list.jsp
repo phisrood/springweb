@@ -265,7 +265,8 @@
 				url: "/member/logout",
 				success: function(data){
 					alert("로그아웃 성공");
-					document.location.reload();
+					//document.location.reload();
+					location.href = "/main/yunHome";
 				}
 			})
 		});
