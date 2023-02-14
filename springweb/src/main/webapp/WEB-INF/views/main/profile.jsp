@@ -8,10 +8,23 @@
 <title>YOUN★STAR</title>
 	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 	<!-- 합쳐지고 최소화된 최신 CSS -->
-	<link rel="stylesheet" hre
-	3f="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" hre3f="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 	<!-- 부가적인 테마 -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	
+	<style type="text/css">
+		.modalContent{
+			display: inline-block;
+			background-color:aliceblue;
+			width:39%;
+		}
+		
+		@media (min-width:1100px){
+			.modalContent{
+				width:100%;
+			}		
+		}
+	</style>
 </head>
 <body>
 	<div class="container" >
@@ -33,11 +46,10 @@
 			</c:if>
 		</div>
 		<!-- 로그인정보 : end -->
-		
-		<div style="height:250px; display: inline-flex; margin-top: 24px;">
-		 	<div style="width:277px;border-radius:70%;overflow:hidden;">
-		 		<img alt="" src="/resources/img/bear.PNG">
-		 	</div>
+
+		<div style="width:inherit; height:250px; display:inline-flex; margin-top: 24px;">
+		 	<img alt="" src="/resources/img/bear.PNG" style="border-radius:70%;">
+		 	
 		 	<div style="width:863px;margin-left: 57px;">
 		 		<div style="margin-top:38px;">
 		 			${member.user_nm} 
@@ -47,6 +59,8 @@
 		 		<div style="margin-top:38px;">게시물</div>	 		
 		 	</div>
 		</div>
+
+		
 		<hr>
 		<ul class="nav justify-content-center">
 		  	<li class="nav-item">
@@ -57,19 +71,19 @@
 		  	</li>
 		</ul>
 		
-		<div class="pictureDiv">
+		<!-- 게시물 -->
+		<div class="pictureDiv ">
 			<ul style="margin-top: 16px;">
+				<th><a href="#myModal" data-toggle="modal" class="pictureTh"><img alt="" src="/resources/img/koala.jpg" style="width:30%;margin-bottom: 8px;"></a></th>
 				<th><img alt="" src="/resources/img/koala.jpg" style="width:30%;margin-bottom: 8px;"></th>
 				<th><img alt="" src="/resources/img/koala.jpg" style="width:30%;margin-bottom: 8px;"></th>
 				<th><img alt="" src="/resources/img/koala.jpg" style="width:30%;margin-bottom: 8px;"></th>
 				<th><img alt="" src="/resources/img/koala.jpg" style="width:30%;margin-bottom: 8px;"></th>
 				<th><img alt="" src="/resources/img/koala.jpg" style="width:30%;margin-bottom: 8px;"></th>
-				<th><img alt="" src="/resources/img/koala.jpg" style="width:30%;margin-bottom: 8px;"></th>
-			</ul>
-			<ul>
-				
 			</ul>
 		</div>
+		
+		<!-- 동영상 -->
 		<div class="videoDiv" >
 			<ul style="margin-top: 16px;">
 				<th>안녕안뇽</th>
@@ -78,13 +92,68 @@
 			</ul>			
 		</div>
 
+		<!-- 게시물 모달 -->
+		<div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false">
+		    <div class="modal-dialog modal-xl modal-dialog-centered" >
+		      <div class="modal-content" style="height: 912px;">
+		      
+		        <!-- Modal Header -->
+		        <div class="modal-header">
+		          <h4 class="modal-title"></h4>
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        </div>
+		        
+		        <!-- Modal body -->
+		        <div class="modal-body test" style="overflow:scroll;" >
+		        	<div style="display: inline-flex;">
+		            	<img class="card-img-top rounded img-fluid" src="/resources/img/koala.jpg" >		        	
+		        	</div>
+		        	<div class="modalContent" >
+		        		<div style="height:500px; overflow:scroll;">
+			        		<ul style="padding-left:15px;width:100%;">
+		        				<span><img alt="" src="/resources/img/bear.PNG" style="width:60px;border-radius:70%;"></span>
+		        				<span style="font-weight:bold;">닉네임자리</span><div>내용부분내용부분내용부분내용부분내용부분내용부분내용부분내용부분</div>
+			        		</ul>
+			        		<ul style="padding-left:15px;width:100%;">
+		        				<span><img alt="" src="/resources/img/bear.PNG" style="width:60px;border-radius:70%;"></span>
+		        				<span style="font-weight:bold;">닉네임자리</span><div>내용부분내용부분내용부분내용부분내용부분내용부분내용부분내용부분</div>
+			        		</ul>
+			        		<ul style="padding-left:15px;width:100%;">
+		        				<span><img alt="" src="/resources/img/bear.PNG" style="width:60px;border-radius:70%;"></span>
+		        				<span style="font-weight:bold;">닉네임자리</span><div>내용부분내용부분내용부분내용부분내용부분내용부분내용부분내용부분</div>
+			        		</ul>
+			        		<ul style="padding-left:15px;width:100%;">
+		        				<span><img alt="" src="/resources/img/bear.PNG" style="width:60px;border-radius:70%;"></span>
+		        				<span style="font-weight:bold;">닉네임자리</span><div>내용부분내용부분내용부분내용부분내용부분내용부분내용부분내용부분</div>
+			        		</ul>
+			        		<ul style="padding-left:15px;width:100%;">
+		        				<span><img alt="" src="/resources/img/bear.PNG" style="width:60px;border-radius:70%;"></span>
+		        				<span style="font-weight:bold;">닉네임자리</span><div>내용부분내용부분내용부분내용부분내용부분내용부분내용부분내용부분</div>
+			        		</ul>
+		        		</div> 
+		        		
+		        	</div>
+		        	
+		        	
+		        </div>
+		        
+		        
+		        <!-- Modal footer -->
+		        <div class="modal-footer">
+		          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		        </div>
+		        
+		      </div>
+		    </div>
+		</div>
+
 
 
 	</div>
 	
 	<script type="text/javascript">
 		$(function(){
-			 $('#videoDiv').css('display', 'none');
+			
 		});
 		
 		/* 로그아웃 버튼 클릭 */
@@ -100,10 +169,15 @@
 		});
 		
 		$("#test1").click(function(){
-			$("#videoDiv").css("display", "none");
+			document.getElementById('videoDiv').style.display = 'none';
 		})
 		$("#test2").click(function(){
 
+		})
+		
+		/* 게시물 사진 클릭 */
+		$(".pictureTh").click(function(){
+			$("#myModal").modal("show");
 		})
 		
 	</script>
